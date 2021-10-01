@@ -1,0 +1,28 @@
+import React from "react";
+import Navbar from "react-bootstrap/Navbar";
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import { Link } from "react-router-dom";
+
+const Navegacion = () => {
+	return (
+		<Navbar bg="dark" variant="dark">
+			<Container>
+				<Navbar.Brand href="#home">Navbar</Navbar.Brand>
+				<Nav className="me-auto">
+					<Nav.Link href="">
+						<Link to="/signup">SignUp</Link>
+					</Nav.Link>
+					<Nav.Link href="">
+						<Link to="/signin">SignIn</Link>
+					</Nav.Link>
+					<Nav.Link href="">
+						<Link to="/">Home</Link>
+					</Nav.Link>
+				</Nav>
+			</Container>
+		</Navbar>
+	);
+};
+
+export default Navegacion;

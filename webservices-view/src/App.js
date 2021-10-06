@@ -5,8 +5,8 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import SignIn from "./components/ui/auth/SignUp";
-import SignUp from "./components/ui/auth/SignIn";
+import SignUp from "./components/ui/auth/SignUp";
+import SignIn from "./components/ui/auth/SignIn";
 import Navegacion from "./components/ui/Navegacion";
 import StickyFooter from "./components/ui/StickyFooter";
 

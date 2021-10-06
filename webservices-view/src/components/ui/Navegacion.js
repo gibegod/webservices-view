@@ -8,7 +8,7 @@ const Navegacion = () => {
 	return (
 		<Navbar bg="dark" variant="dark">
 			<Container>
-				<Navbar.Brand href="#home">Navbar</Navbar.Brand>
+				<Navbar.Brand href="/">Navbar</Navbar.Brand>
 				<Nav className="me-auto">
 					<Nav.Link href="">
 						<Link to="/signup">SignUp</Link>
@@ -18,6 +18,9 @@ const Navegacion = () => {
 					</Nav.Link>
 					<Nav.Link href="">
 						<Link to="/">Home</Link>
+					</Nav.Link>
+					<Nav.Link href="">
+						<Link to="/misdatos">Mis datos</Link>
 					</Nav.Link>
 				</Nav>
 			</Container>

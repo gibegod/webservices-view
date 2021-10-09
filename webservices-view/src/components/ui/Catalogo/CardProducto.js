@@ -35,7 +35,7 @@ const CardProducto = ({ prod }) => {
 
 	return (
 		<Paper className={classes.paper}>
-			<CardActionArea onClick={(e) => history.push(`/product/${idProducto}`)}>
+			<CardActionArea onClick={(e) => history.push(`/producto/${idProducto}`)}>
 				<Grid container>
 					<Grid item>
 						<ButtonBase className={classes.image}>

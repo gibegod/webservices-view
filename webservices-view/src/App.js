@@ -13,6 +13,7 @@ import DatosUsuario from "./components/ui/DatosUsuario";
 import NuevaTarjeta from "./components/ui/NuevaTarjeta";
 import NuevoDomicilio from './components/ui/NuevoDomicilio';
 import Catalogo from "./components/ui/Catalogo/Catalogo";
+import Producto from "./components/ui/Catalogo/Producto";
 
 function App() {
   return (
@@ -38,6 +39,9 @@ function App() {
           </Route>
           <Route path="/catalogo">
             <Catalogo />
+          </Route>
+          <Route path="/producto/:id">
+            <Producto />
           </Route>
           <Route path="/">
           </Route>

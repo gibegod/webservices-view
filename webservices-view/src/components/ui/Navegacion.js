@@ -22,6 +22,9 @@ const Navegacion = () => {
 					<Nav.Link href="">
 						<Link to="/misdatos">Mis datos</Link>
 					</Nav.Link>
+					<Nav.Link href="">
+						<Link to="/catalogo">Catalogo</Link>
+					</Nav.Link>
 				</Nav>
 			</Container>
 		</Navbar>

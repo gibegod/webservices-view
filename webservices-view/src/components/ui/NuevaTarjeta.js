@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -15,20 +12,18 @@ import Alert from "react-bootstrap/Alert";
 
 const theme = createTheme();
 
-export default function SignUp() {
+export default function NuevaTarjeta() {
 	//States
+  const [tipotarjeta, settipotarjeta] = useState("");
+	const [numero, setnumero] = useState("");
 	const [nombre, setnombre] = useState("");
-	const [apellido, setapellido] = useState("");
-	const [dni, setdni] = useState("");
-	const [usuario, setusuario] = useState("");
-	const [tipousuario, settipousuario] = useState("");
-	const [password, setpassword] = useState("");
+	const [cvc, setcvc] = useState("");
+	const [vencimiento, setvencimiento] = useState("");
 	const [showalert, setshowalert] = useState(false);
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
 
-		console.log(nombre, apellido, dni, usuario, password);
 
 		//Pasar a la api y validar
 		//Si hay un error mostrar en pantalla
@@ -37,7 +32,7 @@ export default function SignUp() {
 
 	return (
 		<ThemeProvider theme={theme}>
-			<Container component="main" maxWidth="xs">
+			<Container component="main" maxWidth="sm">
 				<CssBaseline />
 				<Box
 					sx={{
@@ -47,11 +42,8 @@ export default function SignUp() {
 						alignItems: "center",
 					}}
 				>
-					<Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-						<LockOutlinedIcon />
-					</Avatar>
 					<Typography component="h1" variant="h5">
-						Registrarse
+						Nueva tarjeta
 					</Typography>
 
 					{showalert ? (
@@ -72,67 +64,31 @@ export default function SignUp() {
 						sx={{ mt: 3 }}
 					>
 						<Grid container spacing={2}>
-							<Grid item xs={12} sm={6}>
+							<Grid item xs={12} sm={8}>
 								<TextField
-									name="nombre"
+									name="numero"
 									required
 									fullWidth
-									id="nombre"
-									label="Nombre"
+									id="numero"
+									label="Numero"
 									autoFocus
-									value={nombre}
-									onChange={(e) => setnombre(e.target.value)}
-									type="text"
-								/>
-							</Grid>
-							<Grid item xs={12} sm={6}>
-								<TextField
-									required
-									fullWidth
-									id="apellido"
-									label="Apellido"
-									name="apellido"
-									value={apellido}
-									onChange={(e) => setapellido(e.target.value)}
-									type="text"
-								/>
-							</Grid>
-							<Grid item xs={12}>
-								<TextField
-									required
-									fullWidth
-									id="dni"
-									label="DNI"
-									name="dni"
-									value={dni}
-									onChange={(e) => setdni(e.target.value)}
+                  value={numero}
+									onChange={(e) => setnumero(e.target.value)}
 									type="number"
 								/>
 							</Grid>
-							<Grid item xs={12} sm={6}>
-								<TextField
-									required
-									fullWidth
-									id="usuario"
-									label="Usuario"
-									name="usuario"
-									value={usuario}
-									onChange={(e) => setusuario(e.target.value)}
-									type="text"
-								/>
-							</Grid>
 
-							<Grid item xs={12} sm={6}>
+							<Grid item xs={12} sm={4}>
 								<TextField
 									id="outlined-select-currency"
 									select
 									label="Tipo"
 									required
-									value={tipousuario}
-									onChange={(e) => settipousuario(e.target.value)}
+									value={tipotarjeta}
+									onChange={(e) => settipotarjeta(e.target.value)}
 									fullWidth
 								>
-									{["Comprador", "Vendedor"].map((option) => (
+									{["Debito", "Credito"].map((option) => (
 										<MenuItem key={option} value={option}>
 											{option}
 										</MenuItem>
@@ -144,12 +100,37 @@ export default function SignUp() {
 								<TextField
 									required
 									fullWidth
-									name="password"
-									label="Contraseña"
-									type="password"
-									id="password"
-									value={password}
-									onChange={(e) => setpassword(e.target.value)}
+									id="nombre"
+									label="Nombre"
+									name="nombre"
+                  value={nombre}
+									onChange={(e) => setnombre(e.target.value)}
+									type="text"
+								/>
+							</Grid>
+
+							<Grid item xs={12} sm={6}>
+								<TextField
+									required
+									fullWidth
+									id="vencimiento"
+									name="vencimiento"
+                  value={vencimiento}
+									onChange={(e) => setvencimiento(e.target.value)}
+									type="month"
+								/>
+							</Grid>
+
+							<Grid item xs={12} sm={6}>
+								<TextField
+									required
+									fullWidth
+									name="cvc"
+									label="CVC"
+									type="number"
+									id="cvc"
+									onChange={(e) => setcvc(e.target.value)}
+                  value={cvc}
 								/>
 							</Grid>
 						</Grid>
@@ -159,14 +140,9 @@ export default function SignUp() {
 							variant="contained"
 							sx={{ mt: 3, mb: 2 }}
 						>
-							REGISTRATE
+							AGREGAR TARJETA
 						</Button>
 						<Grid container justifyContent="flex-end">
-							<Grid item>
-								<Link href="/signin" variant="body2">
-									Already have an account? Sign in
-								</Link>
-							</Grid>
 						</Grid>
 					</Box>
 				</Box>

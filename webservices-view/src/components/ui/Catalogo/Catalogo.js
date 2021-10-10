@@ -5,7 +5,9 @@ import Sidebar from "./Sidebar";
 import CardProducto from "./CardProducto";
 import Busqueda from "./Busqueda";
 
-const productoprueba = [{id: 1, nombre: "Calcetines", descripcion: "asdasd asd as fas d asd asd as das sdas d asf as fas d asd sa das d asd as", imagen: "https://www.brildor.com/media/catalog/product/cache/21d516047c3b0f7c4a4c397e20cf92ab/c/a/calcetines-d3.jpg", precio: 12.3}];
+const productoprueba = [{id: 1, nombre: "Calcetines", descripcion: "asdasd asd as fas d asd asd as das sdas d asf as fas d asd sa das d asd as", imagen: "https://www.brildor.com/media/catalog/product/cache/21d516047c3b0f7c4a4c397e20cf92ab/c/a/calcetines-d3.jpg", precio: 12.3, stock: 2}, {id: 2, nombre: "Calcetines v2", descripcion: "asdasd asd as fas d asd asd as das sdas d asf as fas d asd sa das d asd as", imagen: "https://www.brildor.com/media/catalog/product/cache/21d516047c3b0f7c4a4c397e20cf92ab/c/a/calcetines-d3.jpg", precio: 5, stock: 3}];
+
+const categoriasprueba = [{id: 1, nombre: "Zapatillas"},{id: 2, nombre: "Remeras"},{id: 3, nombre: "Sombreros"}]
 
 
 const Catalogo = () => {
@@ -13,7 +15,7 @@ const Catalogo = () => {
 	const [search, setsearch] = useState("");
 	const [order, setorder] = useState("Default");
 	const [productlist, setproductlist] = useState(productoprueba);
-	const [categorieslist, setcategorieslist] = useState([]);
+	const [categorieslist, setcategorieslist] = useState(categoriasprueba);
 	const [show, setshow] = useState(true);
 
 	// const getProductsAPI = () => {

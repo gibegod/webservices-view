@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Container, Grid, Tooltip } from "@material-ui/core";
+import { Container, Grid, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import AddCommentIcon from "@mui/icons-material/AddComment";
 import { useHistory, useParams } from "react-router";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -17,7 +16,10 @@ const productoprueba = {
 	imagen:
 		"https://www.brildor.com/media/catalog/product/cache/21d516047c3b0f7c4a4c397e20cf92ab/c/a/calcetines-d3.jpg",
 	precio: 12.3,
+	stock: 2,
 };
+
+const stockdisponible = `Stock disponible: ${productoprueba.stock}`;
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -48,81 +50,58 @@ const Producto = () => {
 	const role = localStorage.getItem("role");
 
 	//States
-	const [activeStep, setActiveStep] = useState(0);
-	const [product, setproduct] = useState(productoprueba);
-	const [color, setColor] = useState("");
-	const [size, setSize] = useState("");
-	const [show, setshow] = useState(false);
-	const [disabled, setdisabled] = useState(true); //Disabled select del talle
-	const [open, setOpen] = useState(false);
+	const [producto, setproducto] = useState(productoprueba);
+	const [cantidad, setcantidad] = useState(1);
 
 	//Parametro que llega desde la url
 	let { idproduct } = useParams();
 
-	const imagesCard = [
-		{
-			label: product.nombre,
-			imgPath: product.imagen,
-		},
-		{
-			label: product.nombre,
-			imgPath: product.video,
-		},
-	];
-
-	const handleClickOpen = () => {
-		setOpen(true);
+	const imagesCard = {
+		label: producto.nombre,
+		imgPath: producto.imagen,
 	};
 
 	const handleClickCarrito = (type) => {
-		if (color === "" || size === "") {
-			alert("Los espacios de color y talle no deben quedar vacios");
+		let carritolocalstorage = localStorage.getItem("carrito");
+
+		if (
+			carritolocalstorage === null ||
+			carritolocalstorage === undefined ||
+			carritolocalstorage === "[]"
+		) {
+			producto.cantidad = cantidad;
+			localStorage.setItem("carrito", JSON.stringify([producto]));
 		} else {
-			let cartlocalstorage = localStorage.getItem("cart");
 
-			//Pongo el atributo seleccionado en el objeto
-			product.atributoselecc = product.atributos.filter(
-				(atrib) => atrib.color === color && atrib.talle === size
-			);
-			if (
-				cartlocalstorage === null ||
-				cartlocalstorage === undefined ||
-				cartlocalstorage === "[]"
-			) {
-				product.cant = 1;
-				localStorage.setItem("cart", JSON.stringify([product]));
+			carritolocalstorage = JSON.parse(carritolocalstorage);
+			//Mismo producto que esta en el carrito
+			const auxprod = carritolocalstorage.filter(
+				(prod) =>
+					prod.id === producto.id
+			)[0];
+
+			if (auxprod === undefined) {
+				producto.cantidad = cantidad;
+				carritolocalstorage.push(producto);
+				localStorage.setItem("carrito", JSON.stringify(carritolocalstorage));
+				if (type === "carrito") alert("Producto agregado al carrito");
+
 			} else {
-				cartlocalstorage = JSON.parse(cartlocalstorage);
-				//Mismo producto con el mismo sku que esta en el carrito
-				const auxprod = cartlocalstorage.filter(
+				//Si el producto tiene el mismo sku que el producto en carrito
+				producto.cantidad = auxprod.cantidad + cantidad;
+
+				//Filtro el producto exactamente igual del carrito
+				carritolocalstorage = carritolocalstorage.filter(
 					(prod) =>
-						prod.idProducto === product.idProducto &&
-						prod.atributoselecc[0].sku === product.atributoselecc[0].sku
-				)[0];
+						prod.id !== producto.id
+				);
 
-				if (auxprod === undefined) {
-					product.cant = 1;
-					cartlocalstorage.push(product);
-					localStorage.setItem("cart", JSON.stringify(cartlocalstorage));
-					if (type === "cart") alert("Producto agregado al carrito");
-				} else {
-					//Si el producto tiene el mismo sku que el producto en carrito
-					product.cant = auxprod.cant + 1;
-
-					//Filtro el producto exactamente igual del carrito
-					cartlocalstorage = cartlocalstorage.filter(
-						(prod) =>
-							prod.idProducto != product.idProducto &&
-							prod.atributoselecc[0].sku != product.atributoselecc[0].sku
-					);
-
-					cartlocalstorage.push(product);
-					localStorage.setItem("cart", JSON.stringify(cartlocalstorage));
-					if (type === "cart") alert("Producto agregado al carrito");
-				}
+				carritolocalstorage.push(producto);
+				localStorage.setItem("carrito", JSON.stringify(carritolocalstorage));
+				if (type === "carrito") alert("Producto agregado al carrito");
 			}
-			if (type === "buy") history.push("/cart");
 		}
+		if (type === "compra") history.push("/carrito");
 	};
 
 	// const handleDeleteProduct = (e, idproduct) => {
@@ -140,22 +119,23 @@ const Producto = () => {
 
 	return (
 		<>
-			<Container maxWidth="md" spacing={4} style={{ marginTop: "2%" }}>
-				<Grid container justify="center" spacing={6}>
+			<Container maxWidth="md" style={{ marginTop: "2%" }}>
+				<Grid container justify="center" spacing={0}>
 					<Grid item xs={6}>
-						<Paper elevantion={3} style={{ padding: 20, height: 500 }}>
+						<Paper style={{ padding: 20, height: 500 }}>
 							<div className={classes.root}>
 								<img
 									className={classes.img}
-									src={imagesCard[0].imgPath}
-									alt={imagesCard[0].label}
+									src={imagesCard.imgPath}
+									alt={imagesCard.label}
 								/>
 							</div>
 							<Typography variant="body2" style={{ marginTop: "5%" }}>
-								{product.descripcion}
+								{producto.descripcion}
 							</Typography>
 						</Paper>
 					</Grid>
+
 					<Grid item xs={4}>
 						<Paper elevantion={3} style={{ height: 500 }}>
 							{role === "ROLE_ADMIN" ? (
@@ -173,52 +153,38 @@ const Producto = () => {
 									/>
 								</Grid>
 							) : null}
-							<Grid container justify="center">
-								<Typography variant="h4" align="center" style={{ padding: 20 }}>
-									{product.nombre}
-								</Typography>
-							</Grid>
 							<Grid container>
-								<Tooltip title={"Añadir comentario"}>
-									<AddCommentIcon
-										style={{ cursor: "pointer", marginLeft: "82%" }}
-										onClick={handleClickOpen}
-									/>
-								</Tooltip>
-							</Grid>
-							<Grid
-								container
-								direction="row"
-								justify="flex-start"
-								alignItems="flex-start"
-								style={{ marginLeft: "6%" }}
-							></Grid>
-							<Grid
-								container
-								direction="row"
-								justify="flex-start"
-								alignItems="flex-start"
-								style={{ marginLeft: "4%" }}
-							>
-								<Typography
-									variant="h4"
-									style={{ marginBottom: 20, fontStyle: "italic" }}
-								>
-									${product.precio}
+								<Typography variant="h4" align="center" style={{ padding: 20 }}>
+									{producto.nombre}
 								</Typography>
 							</Grid>
-							<Grid
-								container
-								style={{ marginBottom: "8%" }}
-								spacing={4}
-								justify="center"
-							></Grid>
+
+							<Grid style={{ marginLeft: "4%" }}>
+								<Typography variant="h4">${producto.precio}</Typography>
+							</Grid>
+
+							<Grid style={{ marginBottom: "10%", marginLeft: "4%" }}>
+								<Grid item xs={5}>
+									<TextField
+										required
+										fullWidth
+										id="cantidad"
+										label="Cantidad"
+										name="cantidad"
+										value={cantidad}
+										onChange={(e) => setcantidad(e.target.value)}
+										type="number"
+										helperText={stockdisponible}
+									/>
+								</Grid>
+							</Grid>
+
 							<Grid container justify="center" spacing={4}>
 								<Button
 									color="primary"
 									variant="contained"
 									style={{ padding: 10, width: "80%", marginBottom: 10 }}
-									onClick={(e) => handleClickCarrito("buy")}
+									onClick={(e) => handleClickCarrito("compra")}
 								>
 									Comprar
 								</Button>
@@ -227,7 +193,7 @@ const Producto = () => {
 									variant="contained"
 									fullWidth
 									style={{ padding: 10, width: "80%" }}
-									onClick={(e) => handleClickCarrito("cart")}
+									onClick={(e) => handleClickCarrito("carrito")}
 								>
 									Agregar al carrito
 								</Button>

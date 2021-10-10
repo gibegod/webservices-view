@@ -1,0 +1,148 @@
+import React, { useEffect, useState } from "react";
+import { Button, Container, Grid, Paper, Typography } from "@material-ui/core";
+import CardCarrito from "./CardCarrito";
+import { useHistory } from "react-router";
+
+const Carrito = () => {
+  const history = useHistory();
+
+  const [subtotal, setsubtotal] = useState(0);
+
+  var listacarrito = localStorage.getItem("carrito");
+  listacarrito = JSON.parse(listacarrito);
+
+  const actualizarSubtotal = () => {
+    let price = 0;
+    //Cambio el precio total
+    var cartlist = localStorage.getItem("carrito");
+    cartlist = JSON.parse(cartlist);
+
+    if (cartlist !== null) {
+      if (cartlist.length !== 0) {
+        cartlist.forEach((prod) => {
+          price += prod.precio * prod.cant;
+        });
+      }
+    }
+    console.log(price);
+    setsubtotal(price)
+    return price;
+  };
+
+  //let price = actualizarSubtotal();
+
+  const handleNext = () => {
+    if (listacarrito !== null) {
+      if (listacarrito.length !== 0) {
+        //Creo el order y completo el subtotal
+        var orderls = localStorage.getItem("order");
+        if (orderls === null) {
+          const order = {
+            user: null,
+            coment: null,
+            shippingCost: null,
+            total: null,
+            descuento: null,
+            subtotal: subtotal,
+            discount: null,
+            direction: null,
+            payment: null,
+          };
+
+          localStorage.setItem("order", JSON.stringify(order));
+        } else {
+          orderls = JSON.parse(orderls);
+
+          orderls.subtotal = subtotal;
+
+          localStorage.setItem("order", JSON.stringify(orderls));
+        }
+
+        history.push("/order");
+      }
+    }
+  };
+
+  return (
+    <div style={{ backgroundColor: "#F5F5F5" }}>
+      <Container maxWidth="md">
+        <Typography variant="h3" align="center" gutterBottom className="pt-3">
+          CARRITO
+        </Typography>
+        <Container maxWidth={"md"} style={{ backgroundColor: "white" }}>
+          <Grid
+            container
+            direction="column"
+            justify="flex-start"
+            alignItems="stretch"
+          >
+            <div className="pt-3"></div>
+            {listacarrito !== null ? (
+              listacarrito.length !== 0 ? (
+                listacarrito.map((prod, index) => (
+                  <CardCarrito
+                    key={index}
+                    id={prod.id}
+                    nombre={prod.nombre}
+                    precio={prod.precio}
+                    imagen={prod.imagen}
+                    cantidad={prod.cantidad}
+                    //setpreecio={setpreecio}
+                    actualizarSubtotal={actualizarSubtotal}
+                  />
+                ))
+              ) : (
+                <Typography variant="h6" align="center" gutterBottom>
+                  No hay productos en el carrito
+                </Typography>
+              )
+            ) : (
+              <Typography variant="h6" align="center" gutterBottom>
+                No hay productos en el carrito
+              </Typography>
+            )}
+          </Grid>
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="flex-end"
+            className="pt-5 pb-3"
+          >
+            <Grid
+              container
+              direction="row"
+              justify="flex-end"
+              alignItems="center"
+            >
+              <Typography variant="h5" gutterBottom>
+                Total
+              </Typography>
+              <div className="pr-5"></div>
+              <Typography variant="h5" gutterBottom>
+                $ {subtotal}
+              </Typography>
+            </Grid>
+
+            <Button
+              variant="contained"
+              style={{
+                backgroundColor: "#007A9A",
+                color: "white",
+                marginTop: "20px",
+              }}
+              size="large"
+              onClick={(e) => handleNext()}
+            >
+              <Typography variant="button" display="block">
+                Continuar
+              </Typography>
+            </Button>
+          </Grid>
+        </Container>
+      </Container>
+    </div>
+  );
+};
+
+export default Carrito;

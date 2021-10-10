@@ -1,79 +1,76 @@
 import React, { Fragment } from "react";
-import { Button, Card, CardContent, Grid } from "@material-ui/core";
+import { Card, CardContent, Grid } from "@material-ui/core";
 import "./Catalogo";
-import ViewHeadlineIcon from "@mui/icons-material/ViewHeadline";
-import ViewModuleIcon from "@mui/icons-material/ViewModule";
 import Dropdown from "react-bootstrap/Dropdown";
-import SplitButton from "react-bootstrap/SplitButton";
+import Button from "react-bootstrap/Button";
 
 const Sidebar = (props) => {
-  const { categorieslist, order, setorder, getProductsByCategoryAPI, getProductsBySubcategoryAPI } = props;
+	const {
+		categorieslist,
+		order,
+		setorder,
+		getProductsByCategoryAPI,
+		getProductsBySubcategoryAPI,
+	} = props;
 
-  return (
-    <Card className="sidecat">
-      <CardContent>
+	return (
+		<Card className="sidecat">
+			<CardContent>
+				<h4 className="pb-2 text-center">Ordenar productos</h4>
+				<div style={{ textAlign: "center" }}>
+					<Dropdown>
+						<Dropdown.Toggle
+							id="dropdown-basic"
+							style={{
+								color: "black",
+								backgroundColor: "#C8EFE3",
+								border: "none",
+							}}
+						>
+							{order}
+						</Dropdown.Toggle>
 
-        <h4 className="pb-2 text-center">Ordenar productos</h4>
-        <div style={{ textAlign: "center" }}>
-          <Dropdown>
-            <Dropdown.Toggle
-              id="dropdown-basic"
-              style={{
-                color: "black",
-                backgroundColor: "#C8EFE3",
-                border: "none",
-              }}
-            >
-              {order}
-            </Dropdown.Toggle>
+						<Dropdown.Menu>
+							<Dropdown.Item onClick={(e) => setorder("Nombre ascendente")}>
+								Nombre ascendente
+							</Dropdown.Item>
+							<Dropdown.Item onClick={(e) => setorder("Nombre descendente")}>
+								Nombre descendente
+							</Dropdown.Item>
+							<Dropdown.Item onClick={(e) => setorder("Mayor precio")}>
+								Mayor precio
+							</Dropdown.Item>
+							<Dropdown.Item onClick={(e) => setorder("Menor precio")}>
+								Menor precio
+							</Dropdown.Item>
+						</Dropdown.Menu>
+					</Dropdown>
+				</div>
 
-            <Dropdown.Menu>
-              <Dropdown.Item onClick={(e) => setorder("Nombre ascendente")}>
-                Nombre ascendente
-              </Dropdown.Item>
-              <Dropdown.Item onClick={(e) => setorder("Nombre descendente")}>
-                Nombre descendente
-              </Dropdown.Item>
-              <Dropdown.Item onClick={(e) => setorder("Mayor precio")}>
-                Mayor precio
-              </Dropdown.Item>
-              <Dropdown.Item onClick={(e) => setorder("Menor precio")}>
-                Menor precio
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
+				<h4 className="pt-4 pb-2 text-center">Categorias</h4>
 
-        <h4 className="pt-4 pb-2 text-center">Categorias</h4>
-
-        {categorieslist.map((cat) => (
-          <Fragment key={cat.idCategory}>
-            <Grid container>
-              <SplitButton
-                bsPrefix="btn btn-block"
-                title={cat.name}
-                style={{
-                  marginBottom: "10px",
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                  backgroundColor: "#C8EFE3",
-                  borderRadius: "5px"
-                }}
-                onClick={(e) => getProductsByCategoryAPI(cat.idCategory)}
-              >
-                {cat.subcategorys.map((subcat) => (
-                  <Dropdown.Item 
-                    key={subcat.idSubcategory}
-                    onClick={(e) => getProductsBySubcategoryAPI(subcat.idSubcategory)}
-                  >{subcat.name}</Dropdown.Item>
-                ))}
-              </SplitButton>
-            </Grid>
-          </Fragment>
-        ))}
-      </CardContent>
-    </Card>
-  );
+				{categorieslist.map((cat) => (
+					<Fragment key={cat.id}>
+						<Grid container>
+							<Button
+								bsPrefix="btn btn-block"
+								style={{
+									marginBottom: "10px",
+									marginLeft: "auto",
+									marginRight: "auto",
+									backgroundColor: "#C8EFE3",
+									borderRadius: "5px",
+								}}
+								//onClick={(e) => getProductsByCategoryAPI(cat.idCategory)}
+							>
+								{cat.nombre}
+							</Button>
+						</Grid>
+					</Fragment>
+				))}
+			</CardContent>
+		</Card>
+	);
 };
 
 export default Sidebar;

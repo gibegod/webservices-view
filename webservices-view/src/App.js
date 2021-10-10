@@ -2,8 +2,7 @@ import React from "react";
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from "react-router-dom";
 import SignUp from "./components/ui/auth/SignUp";
 import SignIn from "./components/ui/auth/SignIn";
@@ -14,6 +13,7 @@ import NuevaTarjeta from "./components/ui/NuevaTarjeta";
 import NuevoDomicilio from './components/ui/NuevoDomicilio';
 import Catalogo from "./components/ui/Catalogo/Catalogo";
 import Producto from "./components/ui/Catalogo/Producto";
+import Carrito from "./components/ui/Carrito/Carrito";
 
 function App() {
   return (
@@ -42,6 +42,9 @@ function App() {
           </Route>
           <Route path="/producto/:id">
             <Producto />
+          </Route>
+          <Route path="/carrito">
+            <Carrito />
           </Route>
           <Route path="/">
           </Route>

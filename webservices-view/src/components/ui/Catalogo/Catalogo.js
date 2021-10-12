@@ -16,6 +16,8 @@ const Catalogo = () => {
 	const [order, setorder] = useState("Default");
 	const [productlist, setproductlist] = useState(productoprueba);
 	const [categorieslist, setcategorieslist] = useState(categoriasprueba);
+	const [preciominimo, setpreciominimo] = useState();
+	const [preciomaximo, setpreciomaximo] = useState();
 	const [show, setshow] = useState(true);
 
 	// const getProductsAPI = () => {
@@ -109,6 +111,10 @@ const Catalogo = () => {
 							categorieslist={categorieslist}
 							order={order}
 							setorder={setorder}
+							preciominimo={preciominimo}
+							setpreciominimo={setpreciominimo}
+							preciomaximo={preciomaximo}
+							setpreciomaximo={setpreciomaximo}
 							//getProductsByCategoryAPI={getProductsByCategoryAPI}
 							//getProductsBySubcategoryAPI={getProductsBySubcategoryAPI}
 						/>

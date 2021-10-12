@@ -53,7 +53,7 @@ const CardProducto = ({ prod }) => {
 									{nombre}
 								</Typography>
 
-								<Typography variant="h5">$ {precio}</Typography>
+								<Typography variant="h5">$ {precio.toFixed(2)}</Typography>
 							</Grid>
 						</Grid>
 					</Grid>

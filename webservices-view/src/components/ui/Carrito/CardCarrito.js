@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CardCarrito = (props) => {
-	const { id, nombre, precio, imagen, actualizarSubtotal, cantidad } = props;
+	const { id, nombre, precio, imagen, cantidad } = props;
 
 	const history = useHistory();
 	const classes = useStyles();
@@ -39,36 +39,6 @@ const CardCarrito = (props) => {
 		localStorage.setItem("carrito", JSON.stringify(cartlocalstorage));
 		window.location.reload();
 	};
-
-	// const handleChangeCant = () => {
-	// 	let cartlocalstorage = localStorage.getItem("cart");
-	// 	cartlocalstorage = JSON.parse(cartlocalstorage);
-
-	// 	cartlocalstorage = cartlocalstorage.filter(
-	// 		(prod) =>
-	// 			prod.idProducto !== id ||
-	// 			(prod.idProducto === id
-	// 	);
-
-	// 	const auxprod = {
-	// 		idProducto,
-	// 		nombre,
-	// 		precio,
-	// 		precioOferta,
-	// 		imagen,
-	// 		atributoselecc,
-	// 		cant,
-	// 	};
-
-	// 	if (cartlocalstorage === [] || cartlocalstorage === null) {
-	// 		localStorage.setItem("cart", JSON.stringify([auxprod]));
-	// 	} else {
-	// 		cartlocalstorage.push(auxprod);
-	// 		localStorage.setItem("cart", JSON.stringify(cartlocalstorage));
-	// 	}
-
-	// 	actualizarSubtotal();
-	// };
 
 	return (
 		<Paper className={classes.paper}>
@@ -104,8 +74,8 @@ const CardCarrito = (props) => {
 						/>
 					</div>
           <Typography variant="h6">Cantidad: {cantidad}</Typography>
-          <Typography variant="h6">$ {precio} c/u</Typography>
-					<Typography variant="h6">Subtotal: $ {precio * cantidad}</Typography>
+          <Typography variant="h6">$ {precio.toFixed(2)} c/u</Typography>
+					<Typography variant="h6">Subtotal: $ {(precio * cantidad).toFixed(2)}</Typography>
 				</Grid>
 			</Grid>
 		</Paper>

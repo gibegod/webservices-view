@@ -14,6 +14,7 @@ import NuevoDomicilio from './components/ui/NuevoDomicilio';
 import Catalogo from "./components/ui/Catalogo/Catalogo";
 import Producto from "./components/ui/Catalogo/Producto";
 import Carrito from "./components/ui/Carrito/Carrito";
+import PasosOrden from "./components/ui/Orden/PasosOrden";
 
 function App() {
   return (
@@ -45,6 +46,9 @@ function App() {
           </Route>
           <Route path="/carrito">
             <Carrito />
+          </Route>
+          <Route path="/orden">
+            <PasosOrden />
           </Route>
           <Route path="/">
           </Route>

@@ -3,6 +3,10 @@ import { Card, CardContent, Grid } from "@material-ui/core";
 import "./Catalogo";
 import Dropdown from "react-bootstrap/Dropdown";
 import Button from "react-bootstrap/Button";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import InputAdornment from "@mui/material/InputAdornment";
+import FormControl from "@mui/material/FormControl";
 
 const Sidebar = (props) => {
 	const {
@@ -11,6 +15,10 @@ const Sidebar = (props) => {
 		setorder,
 		getProductsByCategoryAPI,
 		getProductsBySubcategoryAPI,
+		preciominimo,
+		setpreciominimo,
+		preciomaximo,
+		setpreciomaximo,
 	} = props;
 
 	return (
@@ -46,6 +54,42 @@ const Sidebar = (props) => {
 						</Dropdown.Menu>
 					</Dropdown>
 				</div>
+
+				<h4 className="pt-4 pb-2 text-center">Precios</h4>
+
+				<Grid container>
+					<Grid item xs={6}>
+						<FormControl fullWidth sx={{ m: 1 }}>
+							<InputLabel htmlFor="outlined-adornment-amount">
+								Minimo
+							</InputLabel>
+							<OutlinedInput
+								id="outlined-adornment-amount"
+								value={preciominimo}
+								onChange={(e) => setpreciominimo(e.target.value)}
+								startAdornment={
+									<InputAdornment position="start">$</InputAdornment>
+								}
+								type="number"
+							/>
+						</FormControl>
+					</Grid>
+					<Grid item xs={6}>
+						<FormControl fullWidth sx={{ m: 1 }}>
+							<InputLabel htmlFor="outlined-adornment-amount">
+								Maximo
+							</InputLabel>
+							<OutlinedInput
+								id="outlined-adornment-amount"
+								value={preciomaximo}
+								onChange={(e) => setpreciomaximo(e.target.value)}
+								startAdornment={
+									<InputAdornment position="start">$</InputAdornment>
+								}
+							/>
+						</FormControl>
+					</Grid>
+				</Grid>
 
 				<h4 className="pt-4 pb-2 text-center">Categorias</h4>
 

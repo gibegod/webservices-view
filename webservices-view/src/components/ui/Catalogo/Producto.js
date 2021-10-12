@@ -17,6 +17,8 @@ const productoprueba = {
 		"https://www.brildor.com/media/catalog/product/cache/21d516047c3b0f7c4a4c397e20cf92ab/c/a/calcetines-d3.jpg",
 	precio: 12.3,
 	stock: 2,
+	mediosdepago: ["Credito", "Debito"],
+	idvendedor: 1,
 };
 
 const stockdisponible = `Stock disponible: ${productoprueba.stock}`;
@@ -61,39 +63,40 @@ const Producto = () => {
 		imgPath: producto.imagen,
 	};
 
-	const handleClickCarrito = (type) => {
-		let carritolocalstorage = localStorage.getItem("carrito");
+	let carritolocalstorage = localStorage.getItem("carrito");
 
+	const handleClickCarrito = (type) => {
 		if (
 			carritolocalstorage === null ||
 			carritolocalstorage === undefined ||
 			carritolocalstorage === "[]"
 		) {
+			//Si no hay ningun item en el carrito
 			producto.cantidad = cantidad;
 			localStorage.setItem("carrito", JSON.stringify([producto]));
-		} else {
 
+			if (type === "carrito") alert("Producto agregado al carrito");
+		} else {
 			carritolocalstorage = JSON.parse(carritolocalstorage);
-			//Mismo producto que esta en el carrito
+
+			//Buscamos si el producto esta en el carrito
 			const auxprod = carritolocalstorage.filter(
-				(prod) =>
-					prod.id === producto.id
+				(prod) => prod.id === producto.id
 			)[0];
 
 			if (auxprod === undefined) {
+				//Si el producto no esta en el carrito
 				producto.cantidad = cantidad;
 				carritolocalstorage.push(producto);
 				localStorage.setItem("carrito", JSON.stringify(carritolocalstorage));
 				if (type === "carrito") alert("Producto agregado al carrito");
-
 			} else {
-				//Si el producto tiene el mismo sku que el producto en carrito
-				producto.cantidad = auxprod.cantidad + cantidad;
+				//Si el producto esta en el carrito
+				producto.cantidad = Number(auxprod.cantidad) + Number(cantidad);
 
 				//Filtro el producto exactamente igual del carrito
 				carritolocalstorage = carritolocalstorage.filter(
-					(prod) =>
-						prod.id !== producto.id
+					(prod) => prod.id !== producto.id
 				);
 
 				carritolocalstorage.push(producto);
@@ -159,8 +162,15 @@ const Producto = () => {
 								</Typography>
 							</Grid>
 
-							<Grid style={{ marginLeft: "4%" }}>
-								<Typography variant="h4">${producto.precio}</Typography>
+							<Grid container style={{ marginLeft: "4%" }}>
+								<Grid item xs={6}>
+									<Typography variant="h4">${producto.precio.toFixed(2)}</Typography>
+								</Grid>
+								<Grid item xs={6}>
+									<Typography variant="body2">
+										Medios de pago: {producto.mediosdepago}
+									</Typography>
+								</Grid>
 							</Grid>
 
 							<Grid style={{ marginBottom: "10%", marginLeft: "4%" }}>

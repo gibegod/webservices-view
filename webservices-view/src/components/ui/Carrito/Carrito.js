@@ -13,9 +13,11 @@ const Carrito = () => {
 
 	//Obtener los ids de los vendedores
 	let listavendedores = [];
-	listacarrito.forEach((prd) => {
-		listavendedores.push(prd.idvendedor);
-	});
+	if (listacarrito !== null) {
+		listacarrito.forEach((prd) => {
+			listavendedores.push(prd.idvendedor);
+		});
+	}
 
 	//Elimino duplicados
 	listavendedores = listavendedores.filter((item, index) => {
@@ -52,7 +54,7 @@ const Carrito = () => {
 					usuario: null,
 					total: total,
 					domicilio: null,
-					metododepago: null,
+					mediopago: null,
 				};
 
 				localStorage.setItem("orden", JSON.stringify(orden));

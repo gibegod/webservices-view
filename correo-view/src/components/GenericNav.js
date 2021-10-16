@@ -22,6 +22,8 @@ class GenericNav extends Component{
                     <Nav>
                         <Nav.Link>Envíos</Nav.Link>
                         <NavDropdown title="Mi cuenta">
+                            <NavDropdown.Item>Mi Perfil</NavDropdown.Item>
+                            <NavDropdown.Divider/>
                             <NavDropdown.Item onClick={()=>this.cerrarSesion()}>Cerrar Sesión</NavDropdown.Item>
                         </NavDropdown> 
                     </Nav>             

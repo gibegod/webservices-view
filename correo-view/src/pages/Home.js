@@ -11,12 +11,14 @@ const urlGetEnvios = "http://localhost:9001/api/v1.0/envios";
 
 class Home extends Component{
     state={
-        data:[]
+        envios:[],
+        busqueda:"",
     }
 
     peticionGetEnvios=()=>{
         axios.get(urlGetEnvios).then(response=>{
-            this.setState({data: response.data})
+            this.setState({envios: response.data})
+            this.allEnvios=response.data;
         })
     }
 
@@ -28,6 +30,24 @@ class Home extends Component{
         this.peticionGetEnvios();
     }
 
+    onChangeBusqueda=async e=>{
+        e.persist();
+        await this.setState({busqueda: e.target.value});
+        this.filtrarElementos();
+    }
+
+    filtrarElementos=()=>{
+        var busqueda = this.state.busqueda.toLowerCase();
+        var search=this.allEnvios.filter(item=>{
+            if(item.cod_seguimiento.toLowerCase().includes(busqueda)
+                || item.dni_destinatario.toLowerCase().includes(busqueda)
+                || item.estado.toLowerCase().includes(busqueda)){
+                return item;
+            }
+        })
+        this.setState({envios: search})
+    }
+
     render(){
         return (
             <div>
@@ -35,6 +55,13 @@ class Home extends Component{
 
                 <div className="container">                
                     <h3>Envíos</h3>
+                    <br/>
+                    <input
+                        type="text"
+                        placeholder="Buscar..."
+                        className="form-control"
+                        onChange={this.onChangeBusqueda}
+                    ></input>
                     <br/>
                     <Table striped bordered hover>
                         <thead>
@@ -46,7 +73,7 @@ class Home extends Component{
                             </tr>
                         </thead>
                         <tbody>
-                            {this.state.data.map(envio=>{
+                            {this.state.envios.map(envio=>{
                                 return (
                                     <tr>
                                         <td>{envio.cod_seguimiento}</td>

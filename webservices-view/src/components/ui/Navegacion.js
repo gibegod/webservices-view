@@ -31,6 +31,12 @@ const Navegacion = () => {
 					<Nav.Link href="">
 						<Link to="/compras">Compras</Link>
 					</Nav.Link>
+					<Nav.Link href="">
+						<Link to="/reclamos">Reclamos</Link>
+					</Nav.Link>
+					<Nav.Link href="">
+						<Link to="/denuncias">Denuncias</Link>
+					</Nav.Link>
 				</Nav>
 			</Container>
 		</Navbar>

@@ -16,6 +16,10 @@ import Producto from "./components/ui/Catalogo/Producto";
 import Carrito from "./components/ui/Carrito/Carrito";
 import PasosOrden from "./components/ui/Orden/PasosOrden";
 import Compras from "./components/ui/ComprasRealizadas/Compras";
+import FormReclamo from "./components/ui/ComprasRealizadas/FormReclamo";
+import Reclamos from "./components/ui/ComprasRealizadas/Reclamos";
+import FormDenuncia from "./components/ui/Catalogo/FormDenuncia";
+import Denuncias from "./components/ui/Catalogo/Denuncias";
 
 function App() {
   return (
@@ -53,6 +57,18 @@ function App() {
           </Route>
           <Route path="/compras">
             <Compras />
+          </Route>
+          <Route path="/nuevoreclamo/:id">
+            <FormReclamo />
+          </Route>
+          <Route path="/reclamos">
+            <Reclamos />
+          </Route>
+          <Route path="/nuevadenuncia/:id">
+            <FormDenuncia />
+          </Route>
+          <Route path="/denuncias">
+            <Denuncias />
           </Route>
           <Route path="/">
           </Route>

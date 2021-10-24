@@ -68,6 +68,8 @@ const comprasprueba = [
 ];
 
 const Compras = () => {
+  let history = useHistory();
+
 	return (
 		<Container component="main" maxWidth="md">
 			<Grid container spacing={4}>
@@ -79,7 +81,7 @@ const Compras = () => {
 						<>
 							<h3>Compra {compra.id}</h3>
 							<h4>Estado: </h4>
-							<h4>Fecha: </h4>
+              <h4>Fecha: </h4>
 							{compra.productos.map((prod) => (
 								<CardCompra
 									key={prod.id}
@@ -90,9 +92,11 @@ const Compras = () => {
 									cantidad={prod.cantidad}
 								/>
 							))}
+                <h4>Total: $ {compra.total} </h4>
 
 							<Grid item xs={12} sm={6}>
-								<Button variant="outlined">Iniciar reclamo</Button>
+								<Button variant="outlined" onClick={(e) => history.push(`/nuevoreclamo/${compra.id}`)}>Iniciar reclamo</Button>
+                <Button variant="outlined" color="error" >Cancelar compra</Button>
 							</Grid>
 						</>
 					))}

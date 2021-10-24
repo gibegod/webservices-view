@@ -202,10 +202,19 @@ const Producto = () => {
 									color="primary"
 									variant="contained"
 									fullWidth
-									style={{ padding: 10, width: "80%" }}
+									style={{ padding: 10, width: "80%", marginBottom: 10}}
 									onClick={(e) => handleClickCarrito("carrito")}
 								>
 									Agregar al carrito
+								</Button>
+								<Button
+									color="primary"
+									variant="contained"
+									fullWidth
+									style={{ padding: 10, width: "80%" }}
+									onClick={(e) => history.push(`/nuevadenuncia/${producto.id}`)}
+								>
+									Denunciar publicacion
 								</Button>
 							</Grid>
 						</Paper>

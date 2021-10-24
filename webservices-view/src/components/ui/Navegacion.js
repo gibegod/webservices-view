@@ -28,6 +28,9 @@ const Navegacion = () => {
 					<Nav.Link href="">
 						<Link to="/carrito">Carrito</Link>
 					</Nav.Link>
+					<Nav.Link href="">
+						<Link to="/compras">Compras</Link>
+					</Nav.Link>
 				</Nav>
 			</Container>
 		</Navbar>

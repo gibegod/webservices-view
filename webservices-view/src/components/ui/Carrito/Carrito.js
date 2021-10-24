@@ -49,20 +49,25 @@ const Carrito = () => {
 		if (listacarrito !== null && listacarrito.length !== 0) {
 			//Creo la orden y completo el total
 			var ordenls = localStorage.getItem("orden");
-			if (ordenls === null) {
-				const orden = {
-					usuario: null,
-					total: total,
-					domicilio: null,
-					mediopago: null,
-				};
 
-				localStorage.setItem("orden", JSON.stringify(orden));
-			} else {
-				ordenls = JSON.parse(ordenls);
-				ordenls.total = total;
-				localStorage.setItem("orden", JSON.stringify(ordenls));
-			}
+			const productos = listacarrito.filter(
+				(prod) => prod.idvendedor === listavendedores[0]
+			);
+			let totalorden = 0;
+			productos.forEach((prod) => {
+				totalorden = totalorden + prod.precio * prod.cantidad;
+			});
+
+			const orden = {
+				usuario: null,
+				total: totalorden,
+				domicilio: null,
+				mediopago: null,
+				idvendedor: listavendedores[0],
+				productos: productos,
+			};
+
+			localStorage.setItem("orden", JSON.stringify(orden));
 
 			history.push("/orden");
 		}

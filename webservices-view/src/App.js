@@ -15,6 +15,7 @@ import Catalogo from "./components/ui/Catalogo/Catalogo";
 import Producto from "./components/ui/Catalogo/Producto";
 import Carrito from "./components/ui/Carrito/Carrito";
 import PasosOrden from "./components/ui/Orden/PasosOrden";
+import Compras from "./components/ui/ComprasRealizadas/Compras";
 
 function App() {
   return (
@@ -49,6 +50,9 @@ function App() {
           </Route>
           <Route path="/orden">
             <PasosOrden />
+          </Route>
+          <Route path="/compras">
+            <Compras />
           </Route>
           <Route path="/">
           </Route>

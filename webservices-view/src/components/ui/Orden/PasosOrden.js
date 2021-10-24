@@ -22,9 +22,9 @@ export default function PasosOrden() {
 	const [idmediopago, setidmediopago] = useState();
 	const [alertaerror, setalertaerror] = useState(false);
 
-	let listacarrito = localStorage.getItem("carrito");
-	listacarrito = JSON.parse(listacarrito);
-	const productoactual = listacarrito[0];
+	let ordenls = localStorage.getItem("orden");
+	ordenls = JSON.parse(ordenls);
+	const productosorden = ordenls.productos;
 
 	const isStepSkipped = (step) => {
 		return skipped.has(step);
@@ -89,6 +89,21 @@ export default function PasosOrden() {
 	function getStepContent(stepIndex) {
 		switch (stepIndex) {
 			case 0:
+				//Uno los medios de pago de los productos
+				let mediospago = [];
+				ordenls.productos.forEach(prod => {
+					if(prod.mediosdepago.length > 1 ){
+						mediospago.push(prod.mediosdepago[0], prod.mediosdepago[1]);
+					} else {
+						mediospago.push(prod.mediosdepago[0]);
+					}
+				});
+
+				//Elimino duplicados
+				mediospago = mediospago.filter((item, index)=>{
+					return mediospago.indexOf(item) === index;
+				});
+
 				return (
 					<Grid container spacing={5}>
 						<Grid item xs={12}>
@@ -101,7 +116,7 @@ export default function PasosOrden() {
 							<ElegirMedioPago
 								idmediopago={idmediopago}
 								setidmediopago={setidmediopago}
-								mediosdepagoproducto={productoactual.mediosdepago}
+								mediosdepagoorden={mediospago}
 							/>
 						</Grid>
 					</Grid>
@@ -109,7 +124,7 @@ export default function PasosOrden() {
 			case 1:
 			return (
         <ResumenCompra
-          productoactual={productoactual}
+          productosorden={productosorden}
         />
 			);
 			default:
@@ -123,7 +138,7 @@ export default function PasosOrden() {
 				COMPRA
 			</Typography>
 			<Typography variant="h4" align="center" gutterBottom>
-				Producto: {productoactual.nombre} x{productoactual.cantidad}
+				Vendedor {ordenls.idvendedor}
 			</Typography>
 			<Box sx={{ width: "100%", minHeight: "200px" }}>
 				<Stepper activeStep={activeStep}>

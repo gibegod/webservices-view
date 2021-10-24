@@ -12,10 +12,12 @@ let mediosdepagoprueba = [
 ];
 
 const ElegirMedioPago = (props) => {
-	const { idmediopago, setidmediopago, mediosdepagoproducto } = props;
+	const { idmediopago, setidmediopago, mediosdepagoorden } = props;
+
+	console.log(mediosdepagoorden);
 
 	mediosdepagoprueba = mediosdepagoprueba.filter((medio) =>
-		mediosdepagoproducto.includes(medio.tipo)
+	mediosdepagoorden.includes(medio.tipo)
 	);
 
 	return (

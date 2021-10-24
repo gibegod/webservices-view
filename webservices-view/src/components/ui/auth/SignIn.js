@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -22,6 +23,11 @@ export default function SignIn() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    const user = {user: usuario, pass: password}
+    axios.post("http://localhost:8083/usuario/login", user).then(res =>{
+      console.log(res);
+    })
 
     //Pasar a la api y validar
     //Si hay un error mostrar en pantalla

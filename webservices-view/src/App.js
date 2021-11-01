@@ -20,6 +20,7 @@ import FormReclamo from "./components/ui/ComprasRealizadas/FormReclamo";
 import Reclamos from "./components/ui/ComprasRealizadas/Reclamos";
 import FormDenuncia from "./components/ui/Catalogo/FormDenuncia";
 import Denuncias from "./components/ui/Catalogo/Denuncias";
+import NuevaCuentaBancaria from "./components/ui/NuevaCuentaBancaria";
 
 function App() {
   return (
@@ -42,6 +43,9 @@ function App() {
           </Route>
           <Route path="/nuevatarjeta">
             <NuevaTarjeta />
+          </Route>
+          <Route path="/nuevacuentabancaria">
+            <NuevaCuentaBancaria />
           </Route>
           <Route path="/catalogo">
             <Catalogo />

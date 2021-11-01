@@ -4,78 +4,39 @@ import "./catalogo.css";
 import Sidebar from "./Sidebar";
 import CardProducto from "./CardProducto";
 import Busqueda from "./Busqueda";
-
-const productoprueba = [{id: 1, nombre: "Calcetines", descripcion: "asdasd asd as fas d asd asd as das sdas d asf as fas d asd sa das d asd as", imagen: "https://www.brildor.com/media/catalog/product/cache/21d516047c3b0f7c4a4c397e20cf92ab/c/a/calcetines-d3.jpg", precio: 12.3, stock: 2}, {id: 2, nombre: "Calcetines v2", descripcion: "asdasd asd as fas d asd asd as das sdas d asf as fas d asd sa das d asd as", imagen: "https://www.brildor.com/media/catalog/product/cache/21d516047c3b0f7c4a4c397e20cf92ab/c/a/calcetines-d3.jpg", precio: 5, stock: 3}];
-
-const categoriasprueba = [{id: 1, nombre: "Zapatillas"},{id: 2, nombre: "Remeras"},{id: 3, nombre: "Sombreros"}]
-
+import axios from "axios";
 
 const Catalogo = () => {
 	//States
 	const [search, setsearch] = useState("");
 	const [order, setorder] = useState("Default");
-	const [productlist, setproductlist] = useState(productoprueba);
-	const [categorieslist, setcategorieslist] = useState(categoriasprueba);
+	const [productlist, setproductlist] = useState([]);
+	const [categorieslist, setcategorieslist] = useState([]);
 	const [preciominimo, setpreciominimo] = useState();
 	const [preciomaximo, setpreciomaximo] = useState();
 	const [show, setshow] = useState(true);
 
-	// const getProductsAPI = () => {
-	//   apiAxios
-	//     .get("/product/allproduct")
-	//     .then(({ data }) => {
-	//       setproductlist(data);
-	//       console.log(data);
-	//       setshow(true);
-	//     })
-	//     .catch((error) => console.log(error));
-	// };
+	const getDesdeApi = async () => {
+		const resultProductos = await axios.get("http://localhost:8084/productos/");
+		setproductlist(resultProductos.data);
+		const resultCategorias = await axios.get(
+			"http://localhost:8084/productos/categorias"
+		);
+		setcategorieslist(resultCategorias.data);
 
-	// const getCategoriesAPI = () => {
-	//   apiAxios
-	//     .get("/category/allcategories")
-	//     .then(({ data }) => {
-	//       setcategorieslist(data);
-	//       console.log(data);
-	//     })
-	//     .catch((error) => console.log(error));
-	// };
+		console.log(resultProductos.data);
+	};
 
-	// const getProductsByCategoryAPI = (catid) => {
-	//   apiAxios
-	//   .get("/product/productByCategory", {
-	//     params: { idCategory: catid },
-	//   })
-	//   .then(({ data }) => {
-	//     setproductlist(data);
-	//     console.log(data);
-	//   })
-	//   .catch((error) => console.log(error));
-	// }
+	useEffect(() => {
+		getDesdeApi();
+	}, []);
 
-	// const getProductsBySubcategoryAPI = (subcatid) => {
-	//   apiAxios
-	//   .get("/product/productBySubcategory", {
-	//     params: { idSubcategory: subcatid },
-	//   })
-	//   .then(({ data }) => {
-	//     setproductlist(data);
-	//     console.log(data);
-	//   })
-	//   .catch((error) => console.log(error));
-	// }
-
-	// const getProductsByName = (search) => {
-	//   apiAxios
-	//   .get("/product/productByName", {
-	//     params: { nombre: search },
-	//   })
-	//   .then(({ data }) => {
-	//     setproductlist(data);
-	//     console.log(data);
-	//   })
-	//   .catch((error) => console.log(error));
-	// }
+	const getProductosPorNombre = async (busqueda) => {
+		const result = await axios.get(`http://localhost:8084/productos/getProductoName=${busqueda}`);
+		console.log(busqueda);
+		console.log(result)
+		setproductlist(result.data);
+	}
 
 	//Ordenar productos
 	if (order === "Menor precio") {
@@ -88,14 +49,38 @@ const Catalogo = () => {
 		productlist.sort((a, b) => b.nombre.localeCompare(a.nombre));
 	}
 
-	const handleClickSearch = () => {
-		// getProductsByName(search);
+	const filtrarProductosPorPrecio = (e) => {
+		e.preventDefault();
+
+		let auxproductos = productlist;
+		auxproductos = auxproductos.filter(
+			(prod) => prod.precio >= preciominimo && prod.precio <= preciomaximo
+		);
+		setproductlist(auxproductos);
 	};
 
-	useEffect(() => {
-		// getProductsAPI();
-		// getCategoriesAPI();
-	}, []);
+	const filtrarProductosPorCategoria = async (e, idCategoria) => {
+		e.preventDefault();
+
+		let auxproductos = productlist;
+
+		auxproductos = auxproductos.filter(
+			(prod) => prod.categoria.id === idCategoria
+		);
+		setproductlist(auxproductos);
+	};
+
+	const limpiarFiltros = (e) => {
+		setsearch("");
+		setpreciomaximo();
+		setpreciominimo();
+
+		getDesdeApi();
+	}
+
+	const handleClickSearch = () => {
+		getProductosPorNombre(search);
+	};
 
 	return show ? (
 		<div className="contenedor">
@@ -115,8 +100,9 @@ const Catalogo = () => {
 							setpreciominimo={setpreciominimo}
 							preciomaximo={preciomaximo}
 							setpreciomaximo={setpreciomaximo}
-							//getProductsByCategoryAPI={getProductsByCategoryAPI}
-							//getProductsBySubcategoryAPI={getProductsBySubcategoryAPI}
+							filtrarProductosPorPrecio={filtrarProductosPorPrecio}
+							filtrarProductosPorCategoria={filtrarProductosPorCategoria}
+							limpiarFiltros={limpiarFiltros}
 						/>
 					</Grid>
 					{productlist.length === 0 ? (

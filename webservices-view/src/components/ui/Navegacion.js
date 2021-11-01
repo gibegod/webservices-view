@@ -2,9 +2,18 @@ import React from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const Navegacion = () => {
+	let history = useHistory();
+
+	const handleLogOut = (e) => {
+		e.preventDefault();
+		
+		localStorage.setItem("usuario", "");
+		history.push("/signin");
+	}
+
 	return (
 		<Navbar bg="dark" variant="dark">
 			<Container>
@@ -36,6 +45,9 @@ const Navegacion = () => {
 					</Nav.Link>
 					<Nav.Link href="">
 						<Link to="/denuncias">Denuncias</Link>
+					</Nav.Link>
+					<Nav.Link href="" onClick={e => handleLogOut(e)}>
+						<Link to="/">Cerrar sesion</Link>
 					</Nav.Link>
 				</Nav>
 			</Container>

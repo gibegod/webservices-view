@@ -21,9 +21,13 @@ export default function NuevaTarjeta() {
 	const [vencimiento, setvencimiento] = useState("");
 	const [showalert, setshowalert] = useState(false);
 
-	const handleSubmit = (event) => {
+	const handleSubmit = async (event) => {
 		event.preventDefault();
 
+    // const data = {user: usuario, pass: password}
+    // //Envio la info a la api
+    // const loguearse = await axios.post("http://localhost:8083/usuario/tarjeta", data);
+    // console.log(loguearse.data);
 
 		//Pasar a la api y validar
 		//Si hay un error mostrar en pantalla

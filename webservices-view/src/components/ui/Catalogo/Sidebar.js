@@ -13,17 +13,34 @@ const Sidebar = (props) => {
 		categorieslist,
 		order,
 		setorder,
-		getProductsByCategoryAPI,
-		getProductsBySubcategoryAPI,
 		preciominimo,
 		setpreciominimo,
 		preciomaximo,
 		setpreciomaximo,
+		filtrarProductosPorPrecio,
+		filtrarProductosPorCategoria,
+		limpiarFiltros
 	} = props;
+
 
 	return (
 		<Card className="sidecat">
 			<CardContent>
+			<Grid container>
+					<Button
+								bsPrefix="btn btn-block"
+								style={{
+									marginBottom: "10px",
+									marginLeft: "auto",
+									marginRight: "auto",
+									backgroundColor: "#C8EFE3",
+									borderRadius: "5px",
+								}}
+								onClick={(e) => limpiarFiltros(e)}
+							>
+								LIMPIAR FILTROS
+							</Button>
+					</Grid>
 				<h4 className="pb-2 text-center">Ordenar productos</h4>
 				<div style={{ textAlign: "center" }}>
 					<Dropdown>
@@ -89,6 +106,22 @@ const Sidebar = (props) => {
 							/>
 						</FormControl>
 					</Grid>
+					<Grid container>
+					<Button
+								bsPrefix="btn btn-block"
+								style={{
+									marginTop: "5px",
+									marginBottom: "10px",
+									marginLeft: "auto",
+									marginRight: "auto",
+									backgroundColor: "#C8EFE3",
+									borderRadius: "5px",
+								}}
+								onClick={(e) => filtrarProductosPorPrecio(e)}
+							>
+								Aplicar precios
+							</Button>
+					</Grid>
 				</Grid>
 
 				<h4 className="pt-4 pb-2 text-center">Categorias</h4>
@@ -105,7 +138,7 @@ const Sidebar = (props) => {
 									backgroundColor: "#C8EFE3",
 									borderRadius: "5px",
 								}}
-								//onClick={(e) => getProductsByCategoryAPI(cat.idCategory)}
+								onClick={(e) => filtrarProductosPorCategoria(e, cat.id)}
 							>
 								{cat.nombre}
 							</Button>

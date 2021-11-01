@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Container, TextField, Grid, Button, Typography } from "@mui/material";
+import { Container, TextField, Grid, Typography } from "@mui/material";
+import Button from "react-bootstrap/Button";
 import { Box } from "@mui/system";
 import { useHistory } from "react-router-dom";
 import CardTarjeta from "./Cards/CardTarjeta";
 import CardDomicilio from "./Cards/CardDomicilio";
+import CardCuentaBancaria from "./Cards/CardCuentaBancaria";
 
 const DatosUsuario = () => {
 	let history = useHistory();
@@ -138,39 +140,67 @@ const DatosUsuario = () => {
 					</Grid>
 
 					<Grid item xs={12} sm={6}>
-						<Button variant="outlined" type="submit">
-							Editar datos
+						<Button variant="outline-primary" type="submit">
+							EDITAR DATOS
 						</Button>
 					</Grid>
 				</Grid>
 			</Box>
 
 			<Grid container spacing={4}>
+				{tipousuario === "Comprador" ? (
+					<>
+						<Grid item xs={12}>
+							<Typography component="h1" variant="h5" className="mt-4">
+								Tarjetas
+							</Typography>
+							<CardTarjeta />
+							<CardTarjeta />
+						</Grid>
+						<Grid item xs={12} sm={6}>
+							<Button
+								variant="outline-primary"
+								onClick={(e) => history.push("/nuevatarjeta")}
+							>
+								AGREGAR TARJETA
+							</Button>
+						</Grid>
+					</>
+				) : (
+					<>
+						{" "}
+						<Grid item xs={12}>
+							<Typography component="h1" variant="h5" className="mt-4">
+								Cuentas Bancarias
+							</Typography>
+							<CardCuentaBancaria />
+							<CardCuentaBancaria />
+						</Grid>
+						<Grid item xs={12} sm={6}>
+							<Button
+								variant="outline-primary"
+								onClick={(e) => history.push("/nuevacuentabancaria")}
+							>
+								AGREGAR CUENTA BANCARIA
+							</Button>
+						</Grid>
+					</>
+				)}
+
 				<Grid item xs={12}>
-					<Typography component="h1" variant="h5">
-						Tarjetas
-					</Typography>
-					<CardTarjeta />
-					<CardTarjeta />
-				</Grid>
-				<Grid item xs={12} sm={6}>
-					<Button
-						variant="outlined"
-						onClick={(e) => history.push("/nuevatarjeta")}
-					>
-						Agregar Tarjeta
-					</Button>
-				</Grid>
-				<Grid item xs={12}>
-					<Typography component="h1" variant="h5">
+					<Typography component="h1" variant="h5" className="mt-4">
 						Domicilios
 					</Typography>
 					<CardDomicilio />
 					<CardDomicilio />
 				</Grid>
 				<Grid item xs={12} sm={6}>
-					<Button variant="outlined" onClick={(e) => history.push("/nuevodomicilio")}>
-						Agregar Domicilio
+					<Button
+						variant="outline-primary"
+						className="mb-2"
+						onClick={(e) => history.push("/nuevodomicilio")}
+					>
+						AGREGAR DOMICILIO
 					</Button>
 				</Grid>
 			</Grid>

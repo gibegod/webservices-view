@@ -9,6 +9,8 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import MenuItem from "@mui/material/MenuItem";
 import Alert from "react-bootstrap/Alert";
+import { useHistory } from "react-router-dom";
+import axios from 'axios';
 
 const theme = createTheme();
 
@@ -22,9 +24,13 @@ export default function NuevoDomicilio() {
 	const [provincia, setprovincia] = useState("");
 	const [showalert, setshowalert] = useState(false);
 
-	const handleSubmit = (event) => {
+	const handleSubmit = async (event) => {
 		event.preventDefault();
 
+    //const data = {calle, numero, piso, departamento, localidad, provincia, pais: "Argentina", comprador: null}
+    //Envio la info a la api
+    // const loguearse = await axios.post("http://localhost:8083/usuario/login", data);
+    // console.log(loguearse.data);
 
 		//Pasar a la api y validar
 		//Si hay un error mostrar en pantalla

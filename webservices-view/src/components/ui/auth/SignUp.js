@@ -12,10 +12,20 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import MenuItem from "@mui/material/MenuItem";
 import Alert from "react-bootstrap/Alert";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const theme = createTheme();
 
 export default function SignUp() {
+	let history = useHistory();
+
+	const usernameSesion = localStorage.getItem("usuario");
+	//Si el usuario esta logueado no puede entrar a la pagina
+	if (usernameSesion !== "" && usernameSesion !== undefined) {
+		history.push("/");
+	}
+
 	//States
 	const [nombre, setnombre] = useState("");
 	const [apellido, setapellido] = useState("");
@@ -24,15 +34,48 @@ export default function SignUp() {
 	const [tipousuario, settipousuario] = useState("");
 	const [password, setpassword] = useState("");
 	const [showalert, setshowalert] = useState(false);
+	const [mensajealert, setmensajealert] = useState("");
 
-	const handleSubmit = (event) => {
+	const handleSubmit = async (event) => {
 		event.preventDefault();
 
-		console.log(nombre, apellido, dni, usuario, password);
+		const user = {
+			usuario: usuario,
+			contrasenia: password,
+			dni: dni.toString(),
+			nombre: nombre,
+			apellido: apellido,
+			tipoUsuario: {tipo: tipousuario},
+		};
 
-		//Pasar a la api y validar
-		//Si hay un error mostrar en pantalla
-		//Si no hay error pushear a pantalla principal
+		//Envio los datos a la api
+		const register = await axios.post(
+			"http://localhost:8083/usuario/register",
+			user
+		);
+		console.log(register.data);
+
+		if (register.data === "OK") {
+			//Si no hay error guardar el user en localstorage y pushear a pantalla principal
+			localStorage.setItem(
+				"usuario",
+				JSON.stringify({
+					nombre: nombre,
+					apellido: apellido,
+					usuario: usuario,
+					tipoUsuario: tipousuario,
+				})
+			);
+
+			setshowalert(false);
+			setmensajealert("");
+
+			history.push("/");
+		} else {
+			//Si hay un error mostrar en pantalla
+			setshowalert(true);
+			setmensajealert(register.data);
+		}
 	};
 
 	return (
@@ -61,7 +104,7 @@ export default function SignUp() {
 							dismissible
 							style={{ width: "100%" }}
 						>
-							This is a danger alert—check it out!
+							ERROR: {mensajealert}
 						</Alert>
 					) : null}
 

@@ -12,26 +12,50 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from "react-bootstrap/Alert";
+import { useHistory } from "react-router-dom";
 
 const theme = createTheme();
 
 export default function SignIn() {
+  let history = useHistory();
+
+  const usernameSesion = localStorage.getItem("usuario");
+	//Si el usuario esta logueado no puede entrar a la pagina
+	if (usernameSesion !== "" && usernameSesion !== undefined) {
+		history.push("/");
+	}
+
   //States
   const [usuario, setusuario] = useState("");
   const [password, setpassword] = useState("");
   const [showalert, setshowalert] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const user = {user: usuario, pass: password}
-    axios.post("http://localhost:8083/usuario/login", user).then(res =>{
-      console.log(res);
-    })
+    //Envio la info a la api
+    const loguearse = await axios.post("http://localhost:8083/usuario/login", user);
+    console.log(loguearse.data);
 
-    //Pasar a la api y validar
-    //Si hay un error mostrar en pantalla
-    //Si no hay error pushear a pantalla principal
+    // const userbd = await axios.get("http://localhost:8083/usuario/qwqweww");
+    // console.log(userbd);
+
+    if (loguearse.data === "OK"){
+      //Si no hay error guardar el user en localstorage y pushear a pantalla principal
+			localStorage.setItem(
+				"usuario",
+				JSON.stringify({
+					usuario: usuario,
+				})
+			);
+			setshowalert(false);
+
+			history.push("/");
+		} else {
+			//Si hay un error mostrar en pantalla
+			setshowalert(true);
+    }
 
   };
 
@@ -61,7 +85,7 @@ export default function SignIn() {
 							dismissible
 							style={{ width: "100%" }}
 						>
-							This is a danger alert—check it out!
+							ERROR: Datos incorrectos
 						</Alert>
 					) : null}
 

@@ -8,7 +8,7 @@ import { Grid } from "@mui/material";
 
 export default function CardTarjeta() {
 	return (
-		<Card sx={{ minWidth: 275 }}>
+		<Card sx={{ minWidth: 275 }} className="mb-1">
 			<Grid container spacing={4}>
 				<Grid item xs={12} sm={8}>
 					<CardContent>

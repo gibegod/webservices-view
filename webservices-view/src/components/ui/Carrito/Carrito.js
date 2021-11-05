@@ -6,6 +6,12 @@ import { useHistory } from "react-router";
 const Carrito = () => {
 	const history = useHistory();
 
+	const usernameSesion = localStorage.getItem("usuario");
+	//Si el usuario no esta logueado no puede entrar a la pagina
+	if (usernameSesion === "" || usernameSesion === undefined) {
+		history.push("/signin");
+	}
+
 	const [total, settotal] = useState(0);
 
 	var listacarrito = localStorage.getItem("carrito");

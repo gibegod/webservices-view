@@ -7,7 +7,6 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import MenuItem from "@mui/material/MenuItem";
 import Alert from "react-bootstrap/Alert";
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
@@ -15,6 +14,17 @@ import axios from 'axios';
 const theme = createTheme();
 
 export default function NuevoDomicilio() {
+	let history = useHistory();
+
+	let usuarioSesion = localStorage.getItem("usuario");
+	//Si el usuario no esta logueado no puede entrar a la pagina
+	if (usuarioSesion === "" || usuarioSesion === undefined) {
+		history.push("/signin");
+	}
+
+	//Transformo el texto en JSON
+	usuarioSesion = JSON.parse(usuarioSesion);
+
 	//States
   const [calle, setcalle] = useState("");
 	const [numero, setnumero] = useState("");
@@ -27,14 +37,19 @@ export default function NuevoDomicilio() {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 
-    //const data = {calle, numero, piso, departamento, localidad, provincia, pais: "Argentina", comprador: null}
-    //Envio la info a la api
-    // const loguearse = await axios.post("http://localhost:8083/usuario/login", data);
-    // console.log(loguearse.data);
+		//Valido formulario
+		if(calle.trim() === "" || numero.trim() === "" || localidad.trim() === "" || provincia.trim() === "") {
+			setshowalert(true);
+			return;
+		}
 
-		//Pasar a la api y validar
-		//Si hay un error mostrar en pantalla
-		//Si no hay error pushear a pantalla principal
+    const data = {calle, numero, piso, departamento, localidad, provincia, pais: "Argentina", idUsuario: usuarioSesion.id}
+    //Envio la info a la api
+    const result = await axios.post("http://localhost:8083/usuario/domicilio", data);
+    console.log(result.data);
+
+		//Ir a MisDatos
+		history.push('/misdatos');
 	};
 
 	return (
@@ -60,7 +75,7 @@ export default function NuevoDomicilio() {
 							dismissible
 							style={{ width: "100%" }}
 						>
-							This is a danger alert—check it out!
+							ERROR: Complete todos los campos requeridos
 						</Alert>
 					) : null}
 
@@ -72,7 +87,7 @@ export default function NuevoDomicilio() {
 					>
 						<Grid container spacing={2}>
 
-            <Grid item xs={12} sm={8}>
+            <Grid item xs={12}>
 								<TextField
 									required
 									fullWidth

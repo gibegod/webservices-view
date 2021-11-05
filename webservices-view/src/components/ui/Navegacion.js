@@ -11,6 +11,8 @@ const Navegacion = () => {
 		e.preventDefault();
 		
 		localStorage.setItem("usuario", "");
+		localStorage.setItem("orden", "");
+		localStorage.setItem("carrito", "");
 		history.push("/signin");
 	}
 

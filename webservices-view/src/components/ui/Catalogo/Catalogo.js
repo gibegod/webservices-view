@@ -5,8 +5,17 @@ import Sidebar from "./Sidebar";
 import CardProducto from "./CardProducto";
 import Busqueda from "./Busqueda";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const Catalogo = () => {
+	let history = useHistory();
+
+	const usernameSesion = localStorage.getItem("usuario");
+	//Si el usuario no esta logueado no puede entrar a la pagina
+	if (usernameSesion === "" || usernameSesion === undefined) {
+		history.push("/signin");
+	}
+
 	//States
 	const [search, setsearch] = useState("");
 	const [order, setorder] = useState("Default");

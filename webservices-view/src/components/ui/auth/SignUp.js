@@ -57,13 +57,18 @@ export default function SignUp() {
 
 		if (register.data === "OK") {
 			//Si no hay error guardar el user en localstorage y pushear a pantalla principal
+
+			const userbd = await axios.get(`http://localhost:8083/usuario/${usuario}`);
+      console.log(userbd);
+
 			localStorage.setItem(
 				"usuario",
 				JSON.stringify({
-					nombre: nombre,
-					apellido: apellido,
-					usuario: usuario,
-					tipoUsuario: tipousuario,
+					usuario: userbd.data.usuario,
+          nombre: userbd.data.nombre,
+          apellido: userbd.data.apellido,
+          id: userbd.data.id,
+          tipousuario: userbd.data.tipoUsuario,
 				})
 			);
 
@@ -104,7 +109,7 @@ export default function SignUp() {
 							dismissible
 							style={{ width: "100%" }}
 						>
-							ERROR: {mensajealert}
+							{mensajealert}
 						</Alert>
 					) : null}
 

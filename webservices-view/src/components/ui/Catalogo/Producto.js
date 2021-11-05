@@ -5,23 +5,9 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { useHistory, useParams } from "react-router";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-
-const productoprueba = {
-	id: 1,
-	nombre: "Calcetines",
-	descripcion:
-		"asdasd asd as fas d asd asd as das sdas d asf as fas d asd sa das d asd as",
-	imagen:
-		"https://www.brildor.com/media/catalog/product/cache/21d516047c3b0f7c4a4c397e20cf92ab/c/a/calcetines-d3.jpg",
-	precio: 12.3,
-	stock: 2,
-	mediosdepago: ["Credito", "Debito"],
-	idvendedor: 1,
-};
-
-const stockdisponible = `Stock disponible: ${productoprueba.stock}`;
+import axios from "axios";
+import Spinner from "../Spinner";
+import Alert from "react-bootstrap/Alert";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -49,27 +35,56 @@ const Producto = () => {
 	const classes = useStyles();
 	const history = useHistory();
 
-	const role = localStorage.getItem("role");
+	let usuarioSesion = localStorage.getItem("usuario");
+	//Si el usuario no esta logueado no puede entrar a la pagina
+	if (usuarioSesion === "" || usuarioSesion === undefined) {
+		history.push("/signin");
+	}
+
+	//Transformo el texto en JSON
+	usuarioSesion = JSON.parse(usuarioSesion);
 
 	//States
-	const [producto, setproducto] = useState(productoprueba);
+	const [producto, setproducto] = useState({});
 	const [cantidad, setcantidad] = useState(1);
+	const [showalert, setshowalert] = useState(false);
 
 	//Parametro que llega desde la url
-	let { idproduct } = useParams();
+	const idProducto = useParams().id;
+
+	const fetchApi = async (idProducto) => {
+		const result = await axios.get(
+			`http://localhost:8084/productos/ProductoId=${idProducto}`
+		);
+		console.log(result.data);
+
+		setproducto(result.data);
+	};
+
+	useEffect(() => {
+		if (idProducto !== undefined) {
+			fetchApi(idProducto);
+		}
+	}, [idProducto]);
 
 	const imagesCard = {
 		label: producto.nombre,
 		imgPath: producto.imagen,
 	};
 
-	let carritolocalstorage = localStorage.getItem("carrito");
+	let carritols = localStorage.getItem("carrito");
 
 	const handleClickCarrito = (type) => {
+		//Validacion de cantidad
+		if(cantidad > producto.stockActual) {
+			setshowalert(true);
+			return;
+		}
+
 		if (
-			carritolocalstorage === null ||
-			carritolocalstorage === undefined ||
-			carritolocalstorage === "[]"
+			carritols === null ||
+			carritols === undefined ||
+			carritols === "[]"
 		) {
 			//Si no hay ningun item en el carrito
 			producto.cantidad = cantidad;
@@ -77,50 +92,51 @@ const Producto = () => {
 
 			if (type === "carrito") alert("Producto agregado al carrito");
 		} else {
-			carritolocalstorage = JSON.parse(carritolocalstorage);
+			carritols = JSON.parse(carritols);
 
 			//Buscamos si el producto esta en el carrito
-			const auxprod = carritolocalstorage.filter(
+			const auxprod = carritols.filter(
 				(prod) => prod.id === producto.id
 			)[0];
 
 			if (auxprod === undefined) {
 				//Si el producto no esta en el carrito
 				producto.cantidad = cantidad;
-				carritolocalstorage.push(producto);
-				localStorage.setItem("carrito", JSON.stringify(carritolocalstorage));
+				carritols.push(producto);
+				localStorage.setItem("carrito", JSON.stringify(carritols));
 				if (type === "carrito") alert("Producto agregado al carrito");
 			} else {
 				//Si el producto esta en el carrito
 				producto.cantidad = Number(auxprod.cantidad) + Number(cantidad);
 
 				//Filtro el producto exactamente igual del carrito
-				carritolocalstorage = carritolocalstorage.filter(
+				carritols = carritols.filter(
 					(prod) => prod.id !== producto.id
 				);
 
-				carritolocalstorage.push(producto);
-				localStorage.setItem("carrito", JSON.stringify(carritolocalstorage));
+				carritols.push(producto);
+				localStorage.setItem("carrito", JSON.stringify(carritols));
 				if (type === "carrito") alert("Producto agregado al carrito");
 			}
 		}
 		if (type === "compra") history.push("/carrito");
 	};
 
-	// const handleDeleteProduct = (e, idproduct) => {
-	//   apiAxios
-	//     .post("product/deleteProduct", idproduct, {
-	//       params: { id: idproduct },
-	//     })
-	//     .then(({ data }) => {
-	//       console.log(data);
-	//     })
-	//     .catch((error) => console.log(error));
+	const stockdisponible = `Stock disponible: ${producto.stockActual}`;
 
-	//   history.push("/catalogue");
-	// };
+	//Definir medios de pago
+	let mediosdepago = "";
+	if (producto.debito === true && producto.credito === true) {
+		mediosdepago = "Credito y Debito";
+	} else if (producto.credito === true) {
+		mediosdepago = "Credito";
+	} else {
+		mediosdepago = "Debito";
+	}
 
-	return (
+	return producto.id === undefined ? (
+		<Spinner />
+	) : (
 		<>
 			<Container maxWidth="md" style={{ marginTop: "2%" }}>
 				<Grid container justify="center" spacing={0}>
@@ -141,21 +157,6 @@ const Producto = () => {
 
 					<Grid item xs={4}>
 						<Paper elevantion={3} style={{ height: 500 }}>
-							{role === "ROLE_ADMIN" ? (
-								<Grid container justify="flex-end">
-									<EditIcon
-										onClick={(e) => {
-											e.preventDefault();
-											history.push("/admin/products/" + idproduct);
-										}}
-										style={{ cursor: "pointer" }}
-									/>
-									<DeleteIcon
-										//onClick={(e) => handleDeleteProduct(e, idproduct)}
-										style={{ cursor: "pointer" }}
-									/>
-								</Grid>
-							) : null}
 							<Grid container>
 								<Typography variant="h4" align="center" style={{ padding: 20 }}>
 									{producto.nombre}
@@ -164,11 +165,13 @@ const Producto = () => {
 
 							<Grid container style={{ marginLeft: "4%" }}>
 								<Grid item xs={6}>
-									<Typography variant="h4">${producto.precio.toFixed(2)}</Typography>
+									<Typography variant="h4">
+										${producto.precio.toFixed(2)}
+									</Typography>
 								</Grid>
 								<Grid item xs={6}>
 									<Typography variant="body2">
-										Medios de pago: {producto.mediosdepago}
+										Medios de pago: {mediosdepago}
 									</Typography>
 								</Grid>
 							</Grid>
@@ -176,11 +179,11 @@ const Producto = () => {
 							<Grid style={{ marginBottom: "10%", marginLeft: "4%" }}>
 								<Grid item xs={5}>
 									<TextField
-										required
 										fullWidth
 										id="cantidad"
 										label="Cantidad"
 										name="cantidad"
+										inputProps= {{ min: 1, max: producto.stockActual }}
 										value={cantidad}
 										onChange={(e) => setcantidad(e.target.value)}
 										type="number"
@@ -188,6 +191,18 @@ const Producto = () => {
 									/>
 								</Grid>
 							</Grid>
+
+							{showalert ? (
+						<Alert
+							variant="danger"
+							onClose={() => setshowalert(false)}
+							dismissible
+							style={{ width: "100%" }}
+						>
+							ERROR: La cantidad seleccionada es mayor al stock disponible
+						</Alert>
+					) : null}
+
 
 							<Grid container justify="center" spacing={4}>
 								<Button
@@ -202,7 +217,7 @@ const Producto = () => {
 									color="primary"
 									variant="contained"
 									fullWidth
-									style={{ padding: 10, width: "80%", marginBottom: 10}}
+									style={{ padding: 10, width: "80%", marginBottom: 10 }}
 									onClick={(e) => handleClickCarrito("carrito")}
 								>
 									Agregar al carrito

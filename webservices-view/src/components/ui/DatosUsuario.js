@@ -1,14 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, TextField, Grid, Typography } from "@mui/material";
 import Button from "react-bootstrap/Button";
 import { Box } from "@mui/system";
 import { useHistory } from "react-router-dom";
+import axios from "axios";
 import CardTarjeta from "./Cards/CardTarjeta";
 import CardDomicilio from "./Cards/CardDomicilio";
 import CardCuentaBancaria from "./Cards/CardCuentaBancaria";
+import Spinner from "./Spinner";
 
 const DatosUsuario = () => {
 	let history = useHistory();
+
+	let usuarioSesion = localStorage.getItem("usuario");
+	//Si el usuario no esta logueado no puede entrar a la pagina
+	if (usuarioSesion === "" || usuarioSesion === undefined) {
+		history.push("/signin");
+	}
+
+	//Transformo el texto en JSON
+	usuarioSesion = JSON.parse(usuarioSesion);
 
 	//States
 	const [nombre, setnombre] = useState("");
@@ -21,11 +32,56 @@ const DatosUsuario = () => {
 	const [domicilios, setdomicilios] = useState([]);
 	const [tarjetas, settarjetas] = useState([]);
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
+
+		const data = {
+			id: usuarioSesion.id,
+			usuario: usuario,
+			contrasenia: password,
+			dni: dni.toString(),
+			nombre: nombre,
+			apellido: apellido,
+			tipoUsuario: { tipo: tipousuario },
+			telefono: telefono,
+		};
+
+		console.log(data);
+		//Tirarle los datos a la api
+		const result = await axios.post(
+			"http://localhost:8083/usuario/update",
+			data
+		);
+		console.log(result);
+		//Si no esta ok tirar error
+
+		//Si esta ok actualizar los datos en el localStorage
+
+		//Recargar pagina
 	};
 
-	return (
+	const fetchApi = async (usuario) => {
+		const result = await axios.get(`http://localhost:8083/usuario/${usuario}`);
+		console.log(result.data);
+
+		setnombre(result.data.nombre);
+		setapellido(result.data.apellido);
+		setusuario(result.data.usuario);
+		settipousuario(result.data.tipoUsuario.tipo);
+		setdni(result.data.dni);
+		setpassword(result.data.contrasenia);
+		settelefono(result.data.telefono);
+		setdomicilios(result.data.domicilios);
+		settarjetas(result.data.tarjetas);
+	};
+
+	useEffect(() => {
+		fetchApi(usuarioSesion.usuario);
+	}, [usuarioSesion.usuario]);
+
+	return dni === "" ? (
+		<Spinner />
+	) : (
 		<Container component="main" maxWidth="sm">
 			<Box
 				sx={{
@@ -139,7 +195,7 @@ const DatosUsuario = () => {
 						/>
 					</Grid>
 
-					<Grid item xs={12} sm={6}>
+					<Grid item>
 						<Button variant="outline-primary" type="submit">
 							EDITAR DATOS
 						</Button>
@@ -147,13 +203,22 @@ const DatosUsuario = () => {
 				</Grid>
 			</Box>
 
-			<Grid container spacing={4}>
+			<Grid container>
 				{tipousuario === "Comprador" ? (
 					<>
-						<Grid item xs={12}>
-							<Typography component="h1" variant="h5" className="mt-4">
-								Tarjetas
-							</Typography>
+				<Grid item xs={12} className="pb-2 pt-4">
+					<Typography component="div">
+						<Box
+							sx={{
+								textAlign: "center",
+								m: 1,
+								fontWeight: "bold",
+								fontSize: 30,
+							}}
+						>
+							Tarjetas
+						</Box>
+					</Typography>
 							<CardTarjeta />
 							<CardTarjeta />
 						</Grid>
@@ -168,11 +233,19 @@ const DatosUsuario = () => {
 					</>
 				) : (
 					<>
-						{" "}
-						<Grid item xs={12}>
-							<Typography component="h1" variant="h5" className="mt-4">
-								Cuentas Bancarias
-							</Typography>
+						<Grid item xs={12} className="pb-2 pt-4">
+					<Typography component="div">
+						<Box
+							sx={{
+								textAlign: "center",
+								m: 1,
+								fontWeight: "bold",
+								fontSize: 30,
+							}}
+						>
+							Cuentas Bancarias
+						</Box>
+					</Typography>
 							<CardCuentaBancaria />
 							<CardCuentaBancaria />
 						</Grid>
@@ -187,12 +260,30 @@ const DatosUsuario = () => {
 					</>
 				)}
 
-				<Grid item xs={12}>
-					<Typography component="h1" variant="h5" className="mt-4">
-						Domicilios
+				<Grid item xs={12} className="pb-2 pt-4">
+					<Typography component="div">
+						<Box
+							sx={{
+								textAlign: "center",
+								m: 1,
+								fontWeight: "bold",
+								fontSize: 30,
+							}}
+						>
+							Domicilios
+						</Box>
 					</Typography>
-					<CardDomicilio />
-					<CardDomicilio />
+					{domicilios.map((d) => (
+						<CardDomicilio
+							key={d.id}
+							calle={d.calle}
+							numero={d.numero}
+							departamento={d.departamento}
+							piso={d.piso}
+							localidad={d.localidad}
+							provincia={d.provincia}
+						/>
+					))}
 				</Grid>
 				<Grid item xs={12} sm={6}>
 					<Button

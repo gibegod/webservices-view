@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import axios from 'axios';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from "react-bootstrap/Alert";
+import axios from 'axios';
 import { useHistory } from "react-router-dom";
 
 const theme = createTheme();
@@ -30,6 +30,7 @@ export default function SignIn() {
   const [password, setpassword] = useState("");
   const [showalert, setshowalert] = useState(false);
 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -38,15 +39,20 @@ export default function SignIn() {
     const loguearse = await axios.post("http://localhost:8083/usuario/login", user);
     console.log(loguearse.data);
 
-    // const userbd = await axios.get("http://localhost:8083/usuario/qwqweww");
-    // console.log(userbd);
-
     if (loguearse.data === "OK"){
       //Si no hay error guardar el user en localstorage y pushear a pantalla principal
+
+      const userbd = await axios.get(`http://localhost:8083/usuario/${usuario}`);
+      console.log(userbd);
+
 			localStorage.setItem(
 				"usuario",
 				JSON.stringify({
-					usuario: usuario,
+					usuario: userbd.data.usuario,
+          nombre: userbd.data.nombre,
+          apellido: userbd.data.apellido,
+          id: userbd.data.id,
+          tipousuario: userbd.data.tipoUsuario,
 				})
 			);
 			setshowalert(false);

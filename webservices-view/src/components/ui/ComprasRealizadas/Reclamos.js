@@ -28,6 +28,12 @@ const reclamosprueba = [
 const Reclamos = () => {
 	let history = useHistory();
 
+	const usernameSesion = localStorage.getItem("usuario");
+	//Si el usuario no esta logueado no puede entrar a la pagina
+	if (usernameSesion === "" || usernameSesion === undefined) {
+		history.push("/signin");
+	}
+
 	return (
 		<Container component="main" maxWidth="md">
 			<Grid container spacing={4}>

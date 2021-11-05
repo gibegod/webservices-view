@@ -7,31 +7,45 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import MenuItem from "@mui/material/MenuItem";
 import Alert from "react-bootstrap/Alert";
+import { useHistory } from "react-router-dom";
+import axios from 'axios';
 
 const theme = createTheme();
 
 export default function NuevaTarjeta() {
+	let history = useHistory();
+
+	let usuarioSesion = localStorage.getItem("usuario");
+	//Si el usuario no esta logueado no puede entrar a la pagina
+	if (usuarioSesion === "" || usuarioSesion === undefined) {
+		history.push("/signin");
+	}
+
+	//Transformo el texto en JSON
+	usuarioSesion = JSON.parse(usuarioSesion);
+
 	//States
-  const [tipotarjeta, settipotarjeta] = useState("");
 	const [numero, setnumero] = useState("");
-	const [nombre, setnombre] = useState("");
 	const [cvc, setcvc] = useState("");
-	const [vencimiento, setvencimiento] = useState("");
 	const [showalert, setshowalert] = useState(false);
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 
-    // const data = {user: usuario, pass: password}
-    // //Envio la info a la api
-    // const loguearse = await axios.post("http://localhost:8083/usuario/tarjeta", data);
-    // console.log(loguearse.data);
+		//Valido formulario
+		if(cvc.trim() === "" || numero.trim() === "") {
+			setshowalert(true);
+			return;
+		}
 
-		//Pasar a la api y validar
-		//Si hay un error mostrar en pantalla
-		//Si no hay error pushear a pantalla principal
+    // const data = {numero, cvc, idUsuario: usuarioSesion.id}
+    // //Envio la info a la api
+    // const result = await axios.post("http://localhost:8083/usuario/tarjeta", data);
+    // console.log(result.data);
+
+		// //Ir a MisDatos
+		// history.push('/misdatos');
 	};
 
 	return (
@@ -57,7 +71,7 @@ export default function NuevaTarjeta() {
 							dismissible
 							style={{ width: "100%" }}
 						>
-							This is a danger alert—check it out!
+							ERROR: Complete todos los campos
 						</Alert>
 					) : null}
 
@@ -83,49 +97,6 @@ export default function NuevaTarjeta() {
 							</Grid>
 
 							<Grid item xs={12} sm={4}>
-								<TextField
-									id="outlined-select-currency"
-									select
-									label="Tipo"
-									required
-									value={tipotarjeta}
-									onChange={(e) => settipotarjeta(e.target.value)}
-									fullWidth
-								>
-									{["Debito", "Credito"].map((option) => (
-										<MenuItem key={option} value={option}>
-											{option}
-										</MenuItem>
-									))}
-								</TextField>
-							</Grid>
-
-							<Grid item xs={12}>
-								<TextField
-									required
-									fullWidth
-									id="nombre"
-									label="Nombre"
-									name="nombre"
-                  value={nombre}
-									onChange={(e) => setnombre(e.target.value)}
-									type="text"
-								/>
-							</Grid>
-
-							<Grid item xs={12} sm={6}>
-								<TextField
-									required
-									fullWidth
-									id="vencimiento"
-									name="vencimiento"
-                  value={vencimiento}
-									onChange={(e) => setvencimiento(e.target.value)}
-									type="month"
-								/>
-							</Grid>
-
-							<Grid item xs={12} sm={6}>
 								<TextField
 									required
 									fullWidth

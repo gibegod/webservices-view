@@ -19,9 +19,10 @@ const theme = createTheme();
 export default function SignIn() {
   let history = useHistory();
 
-  const usernameSesion = localStorage.getItem("usuario");
+	const usuarioSesion = localStorage.getItem("usuario");
+  console.log(usuarioSesion);
 	//Si el usuario esta logueado no puede entrar a la pagina
-	if (usernameSesion !== "" && usernameSesion !== undefined) {
+	if (usuarioSesion !== "" && usuarioSesion !== null) {
 		history.push("/");
 	}
 

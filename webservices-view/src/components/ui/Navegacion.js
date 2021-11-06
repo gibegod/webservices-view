@@ -48,6 +48,12 @@ const Navegacion = () => {
 					<Nav.Link href="">
 						<Link to="/denuncias">Denuncias</Link>
 					</Nav.Link>
+					<Nav.Link href="">
+						<Link to="/nuevoproducto">Crear Producto</Link>
+					</Nav.Link>
+					<Nav.Link href="">
+						<Link to="/publicaciones">Publicaciones</Link>
+					</Nav.Link>
 					<Nav.Link href="" onClick={e => handleLogOut(e)}>
 						<Link to="/">Cerrar sesion</Link>
 					</Nav.Link>

@@ -8,13 +8,22 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {
-  useParams
+  useParams, useHistory
 } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 
 const theme = createTheme();
 
 export default function FormReclamo() {
+	let history = useHistory();
+
+	const usuarioSesion = localStorage.getItem("usuario");
+	//Si el usuario no esta logueado no puede entrar a la pagina
+	if (usuarioSesion === "" || usuarioSesion === null) {
+		history.push("/signin");
+	}
+
+
 	//States
 	const [comentario, setcomentario] = useState("");
 	const [showalert, setshowalert] = useState(false);

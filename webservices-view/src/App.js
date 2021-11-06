@@ -21,6 +21,8 @@ import Reclamos from "./components/ui/ComprasRealizadas/Reclamos";
 import FormDenuncia from "./components/ui/Catalogo/FormDenuncia";
 import Denuncias from "./components/ui/Catalogo/Denuncias";
 import NuevaCuentaBancaria from "./components/ui/NuevaCuentaBancaria";
+import CrearProducto from "./components/ui/Vendedor/CrearProducto";
+import Publicaciones from "./components/ui/Vendedor/Publicaciones";
 
 function App() {
   return (
@@ -73,6 +75,12 @@ function App() {
           </Route>
           <Route path="/denuncias">
             <Denuncias />
+          </Route>
+          <Route path="/nuevoproducto">
+            <CrearProducto />
+          </Route>
+          <Route path="/publicaciones">
+            <Publicaciones />
           </Route>
           <Route path="/">
           </Route>

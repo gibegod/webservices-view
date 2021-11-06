@@ -37,7 +37,7 @@ const Producto = () => {
 
 	let usuarioSesion = localStorage.getItem("usuario");
 	//Si el usuario no esta logueado no puede entrar a la pagina
-	if (usuarioSesion === "" || usuarioSesion === undefined) {
+	if (usuarioSesion === "" || usuarioSesion === null) {
 		history.push("/signin");
 	}
 

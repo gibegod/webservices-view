@@ -8,10 +8,22 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Alert from "react-bootstrap/Alert";
+import { useHistory } from "react-router-dom";
 
 const theme = createTheme();
 
 export default function NuevaCuentaBancaria() {
+	let history = useHistory();
+
+	let usuarioSesion = localStorage.getItem("usuario");
+	//Si el usuario no esta logueado no puede entrar a la pagina
+	if (usuarioSesion === "" || usuarioSesion === undefined) {
+		history.push("/signin");
+	}
+
+
+
+
 	//States
 	const [cvu, setcvu] = useState("");
 	const [dni, setdni] = useState("");

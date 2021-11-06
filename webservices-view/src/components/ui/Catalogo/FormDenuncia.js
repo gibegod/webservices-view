@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import MenuItem from "@mui/material/MenuItem";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 
 const categoriasdenunciaprueba = ["Falsificación", "Producto ilegal", "Fraude", "Contenido inapropiado", "Otro"];
@@ -16,6 +16,15 @@ const categoriasdenunciaprueba = ["Falsificación", "Producto ilegal", "Fraude",
 const theme = createTheme();
 
 export default function FormDenuncia() {
+	let history = useHistory();
+
+	const usuarioSesion = localStorage.getItem("usuario");
+	//Si el usuario no esta logueado no puede entrar a la pagina
+	if (usuarioSesion === "" || usuarioSesion === null) {
+		history.push("/signin");
+	}
+
+
 	//States
 	const [categoriadenuncia, setcategoriadenuncia] = useState("");
 	const [comentario, setcomentario] = useState("");

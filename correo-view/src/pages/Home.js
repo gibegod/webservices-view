@@ -53,14 +53,15 @@ class Home extends Component{
         for(var i=0; i<envios.length; i++){
             var cod_seguimiento = envios[i].childNodes[0].innerHTML;
             var estado = envios[i].childNodes[3].childNodes[0].value;
+			var id_venta = envios[i].childNodes[4].innerHTML;
             
-            this.peticionPatchEnvio(cod_seguimiento, estado);
+            this.peticionPatchEnvio(cod_seguimiento, estado, id_venta);
         }  
         window.location.href="./Home";      
     }
 
-    peticionPatchEnvio=(cod_seguimiento, estado)=>{
-        axios.patch(urlPatchEnvio, {params:{cod_seguimiento:cod_seguimiento, estado:estado}})
+    peticionPatchEnvio=(cod_seguimiento, estado, id_venta)=>{
+        axios.patch(urlPatchEnvio, {params:{cod_seguimiento:cod_seguimiento, estado:estado, id_venta:id_venta}})
     }
 
     render(){
@@ -85,6 +86,7 @@ class Home extends Component{
                                 <th>DNI destinatario</th>
                                 <th>Estado</th>
                                 <th>Nuevo estado</th>
+								<th className="hidden">ID venta</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -97,12 +99,13 @@ class Home extends Component{
                                         <td>
                                             <select className="form-select">
                                                 <option disabled selected value={envio.estado}>Seleccione...</option>
-                                                <option value="En preparación">En preparación</option>
-                                                <option value="Despachado">Despachado</option>
-                                                <option value="En Camino">En Camino</option>
-                                                <option value="Entregado">Entregado</option>
+                                                <option value="EN_PREPARACION">En preparación</option>
+                                                <option value="DESPACHADO">Despachado</option>
+                                                <option value="EN_CAMINO">En Camino</option>
+                                                <option value="ENTREGADO">Entregado</option>
                                             </select>
                                         </td>
+										<td className="hidden">{envio.id_venta}</td>
                                     </tr>
                                 )
                             })}                            

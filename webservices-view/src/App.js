@@ -21,6 +21,7 @@ import Reclamos from "./components/ui/ComprasRealizadas/Reclamos";
 import FormDenuncia from "./components/ui/Catalogo/FormDenuncia";
 import Denuncias from "./components/ui/Catalogo/Denuncias";
 import NuevaCuentaBancaria from "./components/ui/NuevaCuentaBancaria";
+import MesaDeAyuda from "./components/ui/MesaDeAyuda/MesaDeAyuda";
 
 function App() {
   return (
@@ -73,6 +74,9 @@ function App() {
           </Route>
           <Route path="/denuncias">
             <Denuncias />
+          </Route>
+          <Route path="/mesadeayuda">
+            <MesaDeAyuda />
           </Route>
           <Route path="/">
           </Route>

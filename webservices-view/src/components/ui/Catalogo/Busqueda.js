@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/styles";
 import TextField from "@material-ui/core/TextField";
 import IconButton from "@material-ui/core/IconButton";
 import PageviewRoundedIcon from "@mui/icons-material/PageviewRounded";
@@ -9,7 +9,6 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 const useStyles = makeStyles((theme) => ({
   root: {
     "& > *": {
-      marginBottom: theme.spacing(1),
       width: "100%",
     },
   },

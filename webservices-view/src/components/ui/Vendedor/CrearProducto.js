@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
@@ -33,44 +33,68 @@ export default function CrearProducto() {
 	const [nombre, setnombre] = useState("");
 	const [descripcion, setdescripcion] = useState("");
 	const [imagen, setimagen] = useState("");
+	const [categoria, setcategoria] = useState("");
+	const [nuevacategoria, setnuevacategoria] = useState("");
 	const [precio, setprecio] = useState("");
 	const [stock, setstock] = useState();
 	const [formadepago, setformadepago] = useState("");
+	const [listacategorias, setlistacategorias] = useState([]);
 	const [showalert, setshowalert] = useState(false);
+
+  const fetchApi = async () => {
+		const result = await axios.get(`http://localhost:8084/productos/categorias`);
+		console.log(result.data);
+
+    setlistacategorias(result.data);
+	};
+
+	useEffect(() => {
+		fetchApi();
+	}, []);
+
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		/*
-		//Valido formulario
+
 		if (
-			calle.trim() === "" ||
-			numero.trim() === "" ||
-			localidad.trim() === "" ||
-			provincia.trim() === ""
+			nombre.trim() === "" ||
+			descripcion.trim() === "" ||
+			imagen.trim() === "" ||
+			precio.trim() === "" ||
+			stock.trim() === "" ||
+			formadepago === "" ||
+			categoria.trim() === "" ||
+			(categoria.trim() === "nuevacategoria" && nuevacategoria.trim() === "")
 		) {
 			setshowalert(true);
 			return;
 		}
 
 		const data = {
-			calle,
-			numero,
-			piso,
-			departamento,
-			localidad,
-			provincia,
-			pais: "Argentina",
-			idUsuario: usuarioSesion.id,
-		};
+			nombre,
+			descripcion,
+			imagen,
+			precio,
+			stockInicial: stock,
+			stockActual: stock,
+			activo: true,
+			categoria: categoria === "nuevacategoria" ? nuevacategoria : categoria,
+			idVendedor: usuarioSesion.id,
+			debito: formadepago === "Debito" || formadepago === "Credito y Debito" ? true : false,
+			credito: formadepago === "Credito" || formadepago === "Credito y Debito" ? true : false
+		}
+
+		console.log(data);
+
 		//Envio la info a la api
 		const result = await axios.post(
-			"http://localhost:8083/usuario/domicilio",
+			"http://localhost:8084/productos/addProducto",
 			data
 		);
 		console.log(result.data);
 
 		//Ir a MisDatos
-		history.push("/misdatos");*/
+		//history.push("/misdatos");
 	};
 
 	return (
@@ -148,6 +172,41 @@ export default function CrearProducto() {
 								/>
 							</Grid>
 
+							<Grid item xs={12} sm={6}>
+								<FormControl fullWidth>
+									<InputLabel id="demo-simple-select-helper-label">
+										Categoria existente
+									</InputLabel>
+									<Select
+										labelId="demo-simple-select-helper-label"
+										id="demo-simple-select-helper"
+										value={categoria}
+										label="Categoria existente"
+										onChange={(e) => setcategoria(e.target.value)}
+									>
+										<MenuItem value="nuevacategoria">
+											Nueva categoria
+										</MenuItem>
+										{listacategorias.map((c) => (
+											<MenuItem value={c.nombre}>{c.nombre}</MenuItem>
+										))}
+									</Select>
+								</FormControl>
+							</Grid>
+
+							<Grid item xs={12} sm={6}>
+								<TextField
+									fullWidth
+									disabled={categoria === "nuevacategoria" ? false : true}
+									id="nuevacategoria"
+									label="Nueva Categoria"
+									name="nuevacategoria"
+									value={nuevacategoria}
+									onChange={(e) => setnuevacategoria(e.target.value)}
+									type="text"
+								/>
+							</Grid>
+
 							<Grid item xs={12} sm={4}>
 								<TextField
 									required
@@ -189,12 +248,13 @@ export default function CrearProducto() {
 										<MenuItem value="">
 											<em>None</em>
 										</MenuItem>
-										{["Credito", "Debito", "Credito y Debito"].map((m, i) => (
-											<MenuItem value={i}>{m}</MenuItem>
+										{["Credito", "Debito", "Credito y Debito"].map((m) => (
+											<MenuItem value={m}>{m}</MenuItem>
 										))}
 									</Select>
 								</FormControl>
 							</Grid>
+
 							<Grid item xs={12}>
 								<div className="d-grid gap-2">
 									<Button variant="outline-primary" size="lg" type="submit">

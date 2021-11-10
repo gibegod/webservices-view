@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Alert from "react-bootstrap/Alert";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
 import InputLabel from "@mui/material/InputLabel";
@@ -17,7 +17,7 @@ import Select from "@mui/material/Select";
 
 const theme = createTheme();
 
-export default function CrearProducto() {
+export default function ModificarProducto() {
 	let history = useHistory();
 
 	let usuarioSesion = localStorage.getItem("usuario");
@@ -29,33 +29,49 @@ export default function CrearProducto() {
 	//Transformo el texto en JSON
 	usuarioSesion = JSON.parse(usuarioSesion);
 
+  //Parametro que llega desde la url
+	const idProducto = useParams().id;
+
 	//States
+  const [id, setid] = useState();
 	const [nombre, setnombre] = useState("");
 	const [descripcion, setdescripcion] = useState("");
 	const [imagen, setimagen] = useState("");
 	const [categoria, setcategoria] = useState("");
 	const [nuevacategoria, setnuevacategoria] = useState("");
 	const [precio, setprecio] = useState("");
-	const [stock, setstock] = useState();
+	const [stockactual, setstockactual] = useState();
+  const [stockinicial, setstockinicial] = useState();
 	const [formadepago, setformadepago] = useState("");
 	const [listacategorias, setlistacategorias] = useState([]);
 	const [showalert, setshowalert] = useState(false);
 
-  const fetchApi = async () => {
-		const result = await axios.get(`http://localhost:8084/productos/categorias`);
-		console.log(result.data);
+  const fetchApi = async (idProducto) => {
+    const resultProducto = await axios.get(`http://localhost:8084/productos/ProductoId=${idProducto}`);
+    console.log(resultProducto.data);
 
+    setid(resultProducto.data.idProducto);
+    setnombre(resultProducto.data.nombre);
+    setdescripcion(resultProducto.data.descripcion);
+    setimagen(resultProducto.data.imagen);
+    setcategoria(resultProducto.data.categoria);
+    setprecio(resultProducto.data.precio);
+    setstockactual(resultProducto.data.stockActual);
+    setstockinicial(resultProducto.data.stockInicial);
+    setformadepago(resultProducto.data.nombre);
+
+		const result = await axios.get(`http://localhost:8084/productos/categorias`);
     setlistacategorias(result.data);
 	};
 
 	useEffect(() => {
-		fetchApi();
-	}, []);
+		fetchApi(idProducto);
+	}, [idProducto]);
 
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-
+/*
 		if (
 			nombre.trim() === "" ||
 			descripcion.trim() === "" ||
@@ -95,6 +111,7 @@ export default function CrearProducto() {
 
 		//Ir a MisDatos
 		//history.push("/misdatos");
+    */
 	};
 
 	return (
@@ -110,7 +127,7 @@ export default function CrearProducto() {
 					}}
 				>
 					<Typography component="h1" variant="h5">
-						Nuevo producto
+						Producto {id}
 					</Typography>
 
 					{showalert ? (
@@ -227,8 +244,8 @@ export default function CrearProducto() {
 									id="stock"
 									name="stock"
 									label="Stock"
-									value={stock}
-									onChange={(e) => setstock(e.target.value)}
+									value={stockinicial}
+									onChange={(e) => setstockinicial(e.target.value)}
 									type="number"
 								/>
 							</Grid>
@@ -258,7 +275,7 @@ export default function CrearProducto() {
 							<Grid item xs={12}>
 								<div className="d-grid gap-2">
 									<Button variant="outline-primary" size="lg" type="submit">
-										CREAR PRODUCTO
+										MODIFICAR PRODUCTO
 									</Button>
 								</div>
 							</Grid>

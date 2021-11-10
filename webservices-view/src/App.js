@@ -23,6 +23,7 @@ import Denuncias from "./components/ui/Catalogo/Denuncias";
 import NuevaCuentaBancaria from "./components/ui/NuevaCuentaBancaria";
 import CrearProducto from "./components/ui/Vendedor/CrearProducto";
 import Publicaciones from "./components/ui/Vendedor/Publicaciones";
+import ModificarProducto from "./components/ui/Vendedor/ModificarProducto";
 
 function App() {
   return (
@@ -78,6 +79,9 @@ function App() {
           </Route>
           <Route path="/nuevoproducto">
             <CrearProducto />
+          </Route>
+          <Route path="/modificarproducto/:id">
+            <ModificarProducto />
           </Route>
           <Route path="/publicaciones">
             <Publicaciones />

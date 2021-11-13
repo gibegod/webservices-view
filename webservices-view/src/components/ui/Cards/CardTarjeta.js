@@ -6,25 +6,23 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Grid } from "@mui/material";
 
-export default function CardTarjeta() {
+export default function CardTarjeta({tarjeta}) {
 	return (
 		<Card sx={{ minWidth: 275 }} className="mb-1">
 			<Grid container spacing={4}>
 				<Grid item xs={12} sm={8}>
 					<CardContent>
 						<Typography
-							sx={{ fontSize: 14 }}
 							color="text.secondary"
 							gutterBottom
 						>
-							Credito o debito
+							{tarjeta.tipo}
 						</Typography>
 						<Typography variant="h5" component="div">
-							Terminada en XXXX
+							Terminada en {tarjeta.numero.substr(-4)}
 						</Typography>
 						<Typography sx={{ mb: 1.5 }} color="text.secondary">
-							Banco: <br />
-							Vencimiento:
+							Vencimiento: {tarjeta.vencimiento}
 						</Typography>
 					</CardContent>
 				</Grid>

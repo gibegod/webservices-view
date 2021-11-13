@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/styles";
 import { ButtonBase, Grid, Paper, Typography } from "@material-ui/core";
 import "./catalogo.css";
 import CardActionArea from "@material-ui/core/CardActionArea";

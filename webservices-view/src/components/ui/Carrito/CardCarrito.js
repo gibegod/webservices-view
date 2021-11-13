@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/styles";
 import { ButtonBase, Grid, Paper, Typography } from "@material-ui/core";
 import { useHistory } from "react-router";
 import CloseIcon from "@mui/icons-material/Close";

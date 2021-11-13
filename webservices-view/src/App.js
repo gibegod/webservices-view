@@ -21,9 +21,13 @@ import Reclamos from "./components/ui/ComprasRealizadas/Reclamos";
 import FormDenuncia from "./components/ui/Catalogo/FormDenuncia";
 import Denuncias from "./components/ui/Catalogo/Denuncias";
 import NuevaCuentaBancaria from "./components/ui/NuevaCuentaBancaria";
+<<<<<<< HEAD
+import MesaDeAyuda from "./components/ui/MesaDeAyuda/MesaDeAyuda";
+=======
 import CrearProducto from "./components/ui/Vendedor/CrearProducto";
 import Publicaciones from "./components/ui/Vendedor/Publicaciones";
 import ModificarProducto from "./components/ui/Vendedor/ModificarProducto";
+>>>>>>> a366b195c2f5fca297ea31989947014d5a6ecb96
 
 function App() {
   return (
@@ -77,6 +81,9 @@ function App() {
           <Route path="/denuncias">
             <Denuncias />
           </Route>
+          <Route path="/mesadeayuda">
+            <MesaDeAyuda />
+            </Route>
           <Route path="/nuevoproducto">
             <CrearProducto />
           </Route>

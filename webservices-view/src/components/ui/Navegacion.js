@@ -49,6 +49,9 @@ const Navegacion = () => {
 						<Link to="/denuncias">Denuncias</Link>
 					</Nav.Link>
 					<Nav.Link href="">
+						<Link to="/mesadeayuda">Mesa de Ayuda</Link>
+					</Nav.Link>
+					<Nav.Link href="">
 						<Link to="/nuevoproducto">Crear Producto</Link>
 					</Nav.Link>
 					<Nav.Link href="">

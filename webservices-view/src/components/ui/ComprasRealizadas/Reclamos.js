@@ -28,9 +28,9 @@ const reclamosprueba = [
 const Reclamos = () => {
 	let history = useHistory();
 
-	const usernameSesion = localStorage.getItem("usuario");
+	const usuarioSesion = localStorage.getItem("usuario");
 	//Si el usuario no esta logueado no puede entrar a la pagina
-	if (usernameSesion === "" || usernameSesion === undefined) {
+	if (usuarioSesion === "" || usuarioSesion === null) {
 		history.push("/signin");
 	}
 

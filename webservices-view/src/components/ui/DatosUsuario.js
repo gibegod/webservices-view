@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import { Box } from "@mui/system";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+import Alert from "react-bootstrap/Alert";
 import CardTarjeta from "./Cards/CardTarjeta";
 import CardDomicilio from "./Cards/CardDomicilio";
 import CardCuentaBancaria from "./Cards/CardCuentaBancaria";
@@ -14,7 +15,7 @@ const DatosUsuario = () => {
 
 	let usuarioSesion = localStorage.getItem("usuario");
 	//Si el usuario no esta logueado no puede entrar a la pagina
-	if (usuarioSesion === "" || usuarioSesion === undefined) {
+	if (usuarioSesion === "" || usuarioSesion === null) {
 		history.push("/signin");
 	}
 
@@ -31,9 +32,22 @@ const DatosUsuario = () => {
 	const [telefono, settelefono] = useState("");
 	const [domicilios, setdomicilios] = useState([]);
 	const [tarjetas, settarjetas] = useState([]);
+	const [showalert, setshowalert] = useState(false);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+
+		//Validacion
+		if(
+			nombre.trim() === "" ||
+			apellido.trim() === "" ||
+			usuario.trim() === "" ||
+			dni.trim() === "" ||
+			password.trim() === ""
+		) {
+			setshowalert(true);
+			return;
+		}
 
 		const data = {
 			id: usuarioSesion.id,
@@ -46,18 +60,29 @@ const DatosUsuario = () => {
 			telefono: telefono,
 		};
 
-		console.log(data);
-		//Tirarle los datos a la api
+		//Le enviamos los datos a la API
 		const result = await axios.post(
 			"http://localhost:8083/usuario/update",
 			data
 		);
 		console.log(result);
+
 		//Si no esta ok tirar error
+		if(result.data !== "OK"){
+			setshowalert(true);
+			return;
+		}
 
 		//Si esta ok actualizar los datos en el localStorage
+		const usuarioAux = {
+			apellido,
+			id: usuarioSesion.id,
+			nombre,
+			tipousuario: usuarioSesion.tipousuario,
+			usuario
+		}
 
-		//Recargar pagina
+		localStorage.setItem("usuario", JSON.stringify(usuarioAux));
 	};
 
 	const fetchApi = async (usuario) => {
@@ -95,6 +120,17 @@ const DatosUsuario = () => {
 				onSubmit={handleSubmit}
 			>
 				<Grid container spacing={4}>
+
+				{showalert ? (
+						<Alert
+							variant="danger"
+							onClose={() => setshowalert(false)}
+							dismissible
+							style={{ width: "100%" }}
+						>
+							ERROR!
+						</Alert>
+					) : null}
 					<Grid item xs={12} sm={4}>
 						<TextField
 							id="nombre"

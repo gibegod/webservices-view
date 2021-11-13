@@ -24,54 +24,24 @@ const MesaDeAyuda = () => {
 		getDesdeApi();
 	}, []);
 
-	const getAtenderReclamo = async (id ) => {
-		console.log(estado);
+	const getAtenderReclamo = async (id, comentario_resolucion ) => {
 		axios.put(
-			"http://localhost:9000/api/v1.0/reclamos/atender",
-			{
-			  idReclamo: id,
-			  estado: estado
-			},
-			{
-			  headers: {
-			  },
-			}
-		  );
+			"http://localhost:9000/api/v1.0/reclamos/atender?aceptado=true&comentarioResolucion="+comentario_resolucion+"&idReclamo="+id+"");
 	}
 
-	const getAtenderDenuncia = async (id ) => {
-		console.log(estado);
+	const getAtenderDenuncia = async (id, comentario_resolucion ) => {
 		axios.put(
-			"http://localhost:9000/api/v1.0/denuncias/atender",
-			{
-			  idDenuncia: id,
-			  estado: estado
-			},
-			{
-			  headers: {
-			  },
-			}
-		  );
+			"http://localhost:9000/api/v1.0/denuncias/atender?aceptado=true&comentarioResolucion="+comentario_resolucion+"&idDenuncia="+id+"");
 	}
 
-	const handleRechazoReclamo = ( id ) => {
-		setestado(false);
-		getAtenderReclamo(id);
+	const getRechazarReclamo = async (id, comentario_resolucion ) => {
+		axios.put(
+			"http://localhost:9000/api/v1.0/reclamos/atender?aceptado=false&comentarioResolucion="+comentario_resolucion+"&idReclamo="+id+"");
 	}
 
-	const handleAceptarReclamo = (id) => {
-		setestado(true);
-		getAtenderReclamo(id);
-	}
-
-	const handleRechazoDenuncia = (id) => {
-		setestado(false);
-		getAtenderDenuncia(id);
-	}
-
-	const handleAceptarDenuncia = (id) => {
-		setestado(true);
-		getAtenderDenuncia(id);
+	const getRechazarDenuncia = async (id, comentario_resolucion ) => {
+		axios.put(
+			"http://localhost:9000/api/v1.0/denuncias/atender?aceptado=false&comentarioResolucion="+comentario_resolucion+"&idDenuncia="+id+"");
 	}
 
     const history = useHistory();
@@ -103,7 +73,7 @@ const MesaDeAyuda = () => {
 								color: "white"
 							}}
 							size="large"
-							onClick={(e) => handleAceptarReclamo( reclamo.id )}
+							onClick={(e) => getAtenderReclamo( reclamo.id, reclamo.comentario_resolucion)}
 							>
 								<Typography variant="button" display="block">
 									Hacer devolucion
@@ -116,7 +86,7 @@ const MesaDeAyuda = () => {
 								color: "white"
 							}}
 							size="large"
-							onClick={(e) => handleRechazoReclamo( reclamo.id )}
+							onClick={(e) => getRechazarReclamo( reclamo.id, reclamo.comentario_resolucion)}
 							>
 								<Typography variant="button" display="block">
 									Rechazar
@@ -142,7 +112,7 @@ const MesaDeAyuda = () => {
 								color: "white"
 							}}
 							size="large"
-							onClick={(e) => handleAceptarDenuncia( denuncia.id )}
+							onClick={(e) => getAtenderDenuncia( denuncia.id, denuncia.comentario_resolucion)}
 							>
 								<Typography variant="button" display="block">
 									Eliminar publicacion
@@ -155,7 +125,7 @@ const MesaDeAyuda = () => {
 								color: "white"
 							}}
 							size="large"
-							onClick={(e) => handleRechazoDenuncia( denuncia.id )}
+							onClick={(e) => getRechazarDenuncia( denuncia.id, denuncia.comentario_resolucion)}
 							>
 								<Typography variant="button" display="block">
 									Rechazar

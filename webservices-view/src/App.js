@@ -86,8 +86,6 @@ function App() {
           <Route path="/publicaciones">
             <Publicaciones />
           </Route>
-          <Route path="/">
-          </Route>
         </Switch>
 
       </div>

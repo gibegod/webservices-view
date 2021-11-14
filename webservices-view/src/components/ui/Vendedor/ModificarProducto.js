@@ -29,11 +29,11 @@ export default function ModificarProducto() {
 	//Transformo el texto en JSON
 	usuarioSesion = JSON.parse(usuarioSesion);
 
-  //Parametro que llega desde la url
+	//Parametro que llega desde la url
 	const idProducto = useParams().id;
 
 	//States
-  const [id, setid] = useState();
+	const [id, setid] = useState();
 	const [nombre, setnombre] = useState("");
 	const [descripcion, setdescripcion] = useState("");
 	const [imagen, setimagen] = useState("");
@@ -41,37 +41,47 @@ export default function ModificarProducto() {
 	const [nuevacategoria, setnuevacategoria] = useState("");
 	const [precio, setprecio] = useState("");
 	const [stockactual, setstockactual] = useState();
-  const [stockinicial, setstockinicial] = useState();
+	const [stockinicial, setstockinicial] = useState();
 	const [formadepago, setformadepago] = useState("");
 	const [listacategorias, setlistacategorias] = useState([]);
 	const [showalert, setshowalert] = useState(false);
 
-  const fetchApi = async (idProducto) => {
-    const resultProducto = await axios.get(`http://localhost:8084/productos/ProductoId=${idProducto}`);
-    console.log(resultProducto.data);
+	const fetchApi = async (idProducto) => {
+		const resultProducto = await axios.get(
+			`http://localhost:8084/productos/ProductoId=${idProducto}`
+		);
+		console.log(resultProducto.data);
 
-    setid(resultProducto.data.idProducto);
-    setnombre(resultProducto.data.nombre);
-    setdescripcion(resultProducto.data.descripcion);
-    setimagen(resultProducto.data.imagen);
-    setcategoria(resultProducto.data.categoria);
-    setprecio(resultProducto.data.precio);
-    setstockactual(resultProducto.data.stockActual);
-    setstockinicial(resultProducto.data.stockInicial);
-    setformadepago(resultProducto.data.nombre);
+		setid(resultProducto.data.idProducto);
+		setnombre(resultProducto.data.nombre);
+		setdescripcion(resultProducto.data.descripcion);
+		setimagen(resultProducto.data.imagen);
+		setcategoria(resultProducto.data.categoria);
+		setprecio(resultProducto.data.precio);
+		setstockactual(resultProducto.data.stockActual);
+		setstockinicial(resultProducto.data.stockInicial);
 
-		const result = await axios.get(`http://localhost:8084/productos/categorias`);
-    setlistacategorias(result.data);
+		if (resultProducto.data.credito && resultProducto.data.debito) {
+			setformadepago("Credito y Debito");
+		} else if (resultProducto.data.credito) {
+			setformadepago("Credito");
+		} else {
+			setformadepago("Debito");
+		}
+
+		const result = await axios.get(
+			`http://localhost:8084/productos/categorias`
+		);
+		setlistacategorias(result.data);
 	};
 
 	useEffect(() => {
 		fetchApi(idProducto);
 	}, [idProducto]);
 
-
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-/*
+		/*
 		if (
 			nombre.trim() === "" ||
 			descripcion.trim() === "" ||
@@ -201,9 +211,7 @@ export default function ModificarProducto() {
 										label="Categoria existente"
 										onChange={(e) => setcategoria(e.target.value)}
 									>
-										<MenuItem value="nuevacategoria">
-											Nueva categoria
-										</MenuItem>
+										<MenuItem value="nuevacategoria">Nueva categoria</MenuItem>
 										{listacategorias.map((c) => (
 											<MenuItem value={c.nombre}>{c.nombre}</MenuItem>
 										))}
@@ -244,8 +252,8 @@ export default function ModificarProducto() {
 									id="stock"
 									name="stock"
 									label="Stock"
-									value={stockinicial}
-									onChange={(e) => setstockinicial(e.target.value)}
+									value={stockactual}
+									onChange={(e) => setstockactual(e.target.value)}
 									type="number"
 								/>
 							</Grid>

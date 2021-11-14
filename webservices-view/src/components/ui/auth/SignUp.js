@@ -76,6 +76,7 @@ export default function SignUp() {
 			setmensajealert("");
 
 			history.push("/");
+			window.location.reload();
 		} else {
 			//Si hay un error mostrar en pantalla
 			setshowalert(true);

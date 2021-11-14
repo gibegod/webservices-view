@@ -59,6 +59,7 @@ export default function SignIn() {
 			setshowalert(false);
 
 			history.push("/");
+      window.location.reload();
 		} else {
 			//Si hay un error mostrar en pantalla
 			setshowalert(true);

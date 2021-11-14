@@ -76,6 +76,9 @@ const Navegacion = () => {
 								<Link to="/publicaciones" className="link-nav">
 									Publicaciones
 								</Link>
+    					<Nav.Link href="">
+						    <Link to="/mesadeayuda">Mesa de Ayuda</Link>
+					     </Nav.Link>
 							</Nav.Link>
 							<Nav.Link href="" onClick={(e) => handleLogOut(e)}>
 								<Link to="/signin" className="link-nav">

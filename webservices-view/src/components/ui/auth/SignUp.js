@@ -24,7 +24,7 @@ export default function SignUp() {
 	//Si el usuario esta logueado no puede entrar a la pagina
 	if (usuarioSesion !== "" && usuarioSesion !== null) {
 		history.push("/");
-	}
+	} 
 
 	//States
 	const [nombre, setnombre] = useState("");

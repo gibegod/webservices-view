@@ -78,7 +78,7 @@ export default function CrearProducto() {
 			stockInicial: stock,
 			stockActual: stock,
 			activo: true,
-			categoria: categoria === "nuevacategoria" ? nuevacategoria : categoria,
+			nombreCategoria: categoria === "nuevacategoria" ? nuevacategoria : categoria,
 			idVendedor: usuarioSesion.id,
 			debito: formadepago === "Debito" || formadepago === "Credito y Debito" ? true : false,
 			credito: formadepago === "Credito" || formadepago === "Credito y Debito" ? true : false
@@ -91,10 +91,15 @@ export default function CrearProducto() {
 			"http://localhost:8084/productos/addProducto",
 			data
 		);
-		console.log(result.data);
 
-		//Ir a MisDatos
-		//history.push("/misdatos");
+		if(result.data !== "OK"){
+			console.log(result.data);
+			setshowalert(true);
+			return;
+		} else {
+			//Ir a Publicaciones
+			history.push("/publicaciones");
+		}
 	};
 
 	return (

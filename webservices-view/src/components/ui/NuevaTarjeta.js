@@ -29,6 +29,7 @@ export default function NuevaTarjeta() {
 	const [numero, setnumero] = useState("");
 	const [cvc, setcvc] = useState("");
 	const [showalert, setshowalert] = useState(false);
+	const [mensajealerta, setmensajealerta] = useState("");
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
@@ -36,16 +37,24 @@ export default function NuevaTarjeta() {
 		//Valido formulario
 		if(cvc.trim() === "" || numero.trim() === "") {
 			setshowalert(true);
+			setmensajealerta("Error: Por favor complete todos los campos requeridos");
 			return;
 		}
 
-    // const data = {numero, cvc, idUsuario: usuarioSesion.id}
-    // //Envio la info a la api
-    // const result = await axios.post("http://localhost:8083/usuario/tarjeta", data);
-    // console.log(result.data);
+    const data = {numero, cvc, idComprador: usuarioSesion.id}
+    //Envio la info a la api
+    const result = await axios.post("http://localhost:8083/usuario/tarjeta", data);
+    console.log(result.data);
 
-		// //Ir a MisDatos
-		// history.push('/misdatos');
+		if(result.data !== "OK") {
+			setshowalert(true);
+			setmensajealerta(result.data);
+			return;
+		} else {
+			//Ir a MisDatos
+			history.push('/misdatos');
+		}
+
 	};
 
 	return (
@@ -71,7 +80,7 @@ export default function NuevaTarjeta() {
 							dismissible
 							style={{ width: "100%" }}
 						>
-							ERROR: Complete todos los campos
+							{mensajealerta}
 						</Alert>
 					) : null}
 

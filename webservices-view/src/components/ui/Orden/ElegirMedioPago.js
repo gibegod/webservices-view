@@ -12,13 +12,13 @@ let mediosdepagoprueba = [
 ];
 
 const ElegirMedioPago = (props) => {
-	const { idmediopago, setidmediopago, mediosdepagoorden } = props;
+	const { idmediopago, setidmediopago, mediosdepagoorden, datosusuario } = props;
 
-	console.log(mediosdepagoorden);
-
-	mediosdepagoprueba = mediosdepagoprueba.filter((medio) =>
-	mediosdepagoorden.includes(medio.tipo)
+	let mediosdepagohabilitados = datosusuario.tarjetas.filter(tarj =>
+		mediosdepagoorden.includes(tarj.tipo)
 	);
+	
+	console.log(mediosdepagohabilitados);
 
 	return (
 		<div>
@@ -33,12 +33,9 @@ const ElegirMedioPago = (props) => {
 					label="Medio de pago"
 					onChange={(e) => setidmediopago(e.target.value)}
 				>
-					<MenuItem value="">
-						<em>None</em>
-					</MenuItem>
-					{mediosdepagoprueba.map((medio) => (
+					{mediosdepagohabilitados.map((medio) => (
 						<MenuItem value={medio.id}>
-							{medio.banco} - {medio.tipo} - {medio.numero}
+							{medio.tipo} - {medio.numero}
 						</MenuItem>
 					))}
 				</Select>

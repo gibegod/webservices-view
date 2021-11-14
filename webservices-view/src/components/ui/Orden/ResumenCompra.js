@@ -1,5 +1,6 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
 import CardProductoResumen from "./CardProductoResumen";
 
 const ResumenCompra = (props) => {
@@ -22,9 +23,17 @@ const ResumenCompra = (props) => {
 				))}
 			</Grid>
 			<Grid item xs={6}>
-				Domicilio: {ordenls.domicilio} <br />
-				Medio de pago: {ordenls.mediopago} <br />
-				Total: $ {ordenls.total.toFixed(2)}
+				<Typography variant="h6" gutterBottom component="div">
+					<b>Domicilio:</b> {ordenls.domicilio.calle} {ordenls.domicilio.numero}{" "}
+					- {ordenls.domicilio.localidad}
+				</Typography>
+				<Typography variant="h6" gutterBottom component="div">
+					<b>Medio de pago:</b> {ordenls.mediopago.tipo} -{" "}
+					{ordenls.mediopago.numero}
+				</Typography>
+				<Typography variant="h6" gutterBottom component="div">
+					<b>Total:</b> $ {ordenls.total.toFixed(2)}{" "}
+				</Typography>
 			</Grid>
 		</Grid>
 	);

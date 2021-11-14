@@ -41,7 +41,7 @@ const Catalogo = () => {
 	}, []);
 
 	const getProductosPorNombre = async (busqueda) => {
-		const result = await axios.get(`http://localhost:8084/productos/getProductoName=${busqueda}`);
+		const result = await axios.get(`http://localhost:8084/productos/name=${busqueda}`);
 		console.log(busqueda);
 		console.log(result)
 		setproductlist(result.data);

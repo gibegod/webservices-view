@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -8,19 +8,39 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Alert from "@mui/material/Alert";
+import { useHistory } from "react-router";
+import axios from "axios";
 import ElegirDomicilio from "./ElegirDomicilio";
 import ElegirMedioPago from "./ElegirMedioPago";
 import ResumenCompra from "./ResumenCompra";
+import Spinner from "../Spinner";
 
 const steps = ["Domicilio y Medio de pago", "Confirmar"];
 
 export default function PasosOrden() {
+	const history = useHistory();
+
 	const [activeStep, setActiveStep] = React.useState(0);
 	const [skipped, setSkipped] = React.useState(new Set());
 
 	const [iddomicilio, setiddomicilio] = useState();
 	const [idmediopago, setidmediopago] = useState();
 	const [alertaerror, setalertaerror] = useState(false);
+	const [datosusuario, setdatosusuario] = useState();
+
+	let usuarioSesion = localStorage.getItem("usuario");
+	usuarioSesion = JSON.parse(usuarioSesion);
+
+	//Traemos los datos del usuario
+	const fetchApi = async (usuario) => {
+		const result = await axios.get(`http://localhost:8083/usuario/${usuario}`);
+		setdatosusuario(result.data);
+		console.log(result.data);
+	};
+
+	useEffect(() => {
+		fetchApi(usuarioSesion.usuario);
+	}, [usuarioSesion.usuario]);
 
 	let ordenls = localStorage.getItem("orden");
 	ordenls = JSON.parse(ordenls);
@@ -30,17 +50,6 @@ export default function PasosOrden() {
 		return skipped.has(step);
 	};
 
-	// const handleNext = () => {
-	//   let newSkipped = skipped;
-	//   if (isStepSkipped(activeStep)) {
-	//     newSkipped = new Set(newSkipped.values());
-	//     newSkipped.delete(activeStep);
-	//   }
-
-	//   setActiveStep((prevActiveStep) => prevActiveStep + 1);
-	//   setSkipped(newSkipped);
-	// };
-
 	const handleBack = () => {
 		setActiveStep((prevActiveStep) => prevActiveStep - 1);
 	};
@@ -49,7 +58,7 @@ export default function PasosOrden() {
 		setActiveStep(0);
 	};
 
-	const handleNext = () => {
+	const handleNext = async () => {
 		switch (activeStep) {
 			case 0: //Mediodepago y domicilio
 				if (iddomicilio === (undefined || "") || idmediopago === (undefined || "")) {
@@ -62,22 +71,59 @@ export default function PasosOrden() {
         let ordenls = localStorage.getItem("orden");
 				ordenls = JSON.parse(ordenls);
 
-        let usuariols = localStorage.getItem("usuario");
-        usuariols = JSON.parse(usuariols);
-
-        ordenls.domicilio = iddomicilio;
-        ordenls.mediopago = idmediopago;
+				ordenls.domicilio = datosusuario.domicilios.filter(dom => dom.id === iddomicilio)[0];
+				ordenls.mediopago = datosusuario.tarjetas.filter(tarj => tarj.id === idmediopago)[0];
         //ordenls.comprador = usuariols.id;
 
         localStorage.setItem("orden", JSON.stringify(ordenls));
 				break;
 			case 1: //Confirmar
 
+				//Traer orden del localstorage
+				let ordenLocalStorage = localStorage.getItem("orden");
+				ordenLocalStorage = JSON.parse(ordenLocalStorage);
+
+				const productos = ordenLocalStorage.productos;
+				const idproductos = [];
+
+				productos.forEach(prd => {
+					prd.idProducto = prd.id;
+					idproductos.push(prd.id);
+				});
+
+				const data = {
+					total: ordenLocalStorage.total,
+					domicilio: ordenLocalStorage.domicilio.id,
+					comprador: usuarioSesion.id,
+					idvendedor: ordenLocalStorage.productos[0].vendedor.id,
+					mediopago: ordenLocalStorage.mediopago.id,
+					productos: productos
+				};
+
         //Mandar a la API
+				const result = await axios.post("http://localhost:8084/venta", data);
+				console.log(result.data);
 
-        //Borrar el primer producto del carrito
+				if(result.data !== "OK"){
+					setalertaerror(true);
+					return;
+				} else {
+        	//Borrar los productos comprados del carrito
+					let carritoLocalStorage = localStorage.getItem("carrito");
+					carritoLocalStorage = JSON.parse(carritoLocalStorage);
 
-        //Borrar orden
+					carritoLocalStorage = carritoLocalStorage.filter(prd => !idproductos.includes(prd.id));
+
+					localStorage.setItem("carrito", JSON.stringify(carritoLocalStorage));
+
+        	//Borrar orden
+					localStorage.setItem("orden", "");
+
+					//Ir al catalogo
+					history.push("/catalogo");
+				}
+
+
 				break;
 			default:
 				break;
@@ -92,16 +138,12 @@ export default function PasosOrden() {
 				//Uno los medios de pago de los productos
 				let mediospago = [];
 				ordenls.productos.forEach(prod => {
-					if(prod.mediosdepago.length > 1 ){
-						mediospago.push(prod.mediosdepago[0], prod.mediosdepago[1]);
-					} else {
-						mediospago.push(prod.mediosdepago[0]);
+					if(prod.credito === true) {
+						mediospago.push("Credito");
 					}
-				});
-
-				//Elimino duplicados
-				mediospago = mediospago.filter((item, index)=>{
-					return mediospago.indexOf(item) === index;
+					if(prod.debito === true){
+						mediospago.push("Debito");
+					}
 				});
 
 				return (
@@ -110,6 +152,7 @@ export default function PasosOrden() {
 							<ElegirDomicilio
 								iddomicilio={iddomicilio}
 								setiddomicilio={setiddomicilio}
+								datosusuario={datosusuario}
 							/>
 						</Grid>
 						<Grid item xs={12}>
@@ -117,6 +160,7 @@ export default function PasosOrden() {
 								idmediopago={idmediopago}
 								setidmediopago={setidmediopago}
 								mediosdepagoorden={mediospago}
+								datosusuario={datosusuario}
 							/>
 						</Grid>
 					</Grid>
@@ -132,13 +176,13 @@ export default function PasosOrden() {
 		}
 	}
 
-	return (
+	return datosusuario === undefined ? <Spinner /> : (
 		<Container maxWidth="md">
 			<Typography variant="h3" align="center" gutterBottom className="pt-3">
 				COMPRA
 			</Typography>
 			<Typography variant="h4" align="center" gutterBottom>
-				Vendedor {ordenls.idvendedor}
+				Vendedor {productosorden[0].vendedor.id}
 			</Typography>
 			<Box sx={{ width: "100%", minHeight: "200px" }}>
 				<Stepper activeStep={activeStep}>
@@ -157,7 +201,7 @@ export default function PasosOrden() {
 				</Stepper>
 
 				{alertaerror ? (
-					<Alert severity="error">Se deben completar ambos campos</Alert>
+					<Alert severity="error">Se producto un error</Alert>
 				) : null}
 
 				{activeStep === steps.length ? (

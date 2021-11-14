@@ -255,8 +255,12 @@ const DatosUsuario = () => {
 							Tarjetas
 						</Box>
 					</Typography>
-							<CardTarjeta />
-							<CardTarjeta />
+					{tarjetas.map(tarj => (
+						<CardTarjeta
+							tarjeta={tarj}
+						/>
+					))}
+							
 						</Grid>
 						<Grid item xs={12} sm={6}>
 							<Button

@@ -8,7 +8,7 @@ const MesaDeAyuda = () => {
 
 	const [denunciaslist, setdenunciaslist] = useState([]);
 	const [reclamoslist, setreclamoslist] = useState([]);
-	const [comentario_resolucion, setcomentario_resolucion] = useState(); 
+	const [comentario_resolucion, setcomentario_resolucion] = useState([]); 
 
 	const getDesdeApi = async () => {
 		const resultDenuncias = await axios.get("http://localhost:9000/api/v1.0/denuncias/");
@@ -107,9 +107,13 @@ const MesaDeAyuda = () => {
 							<h4>Producto asociado: {denuncia.pedido}</h4>
 							<h4>Estado: {denuncia.estado}</h4>
 							<p>Comentario: {denuncia.comentarioComprador}</p>
-							{denuncia.comentarioResolucion === null ? null : (
-								<p>Resolucion: {denuncia.comentarioResolucion}</p>
-							)}
+							<TextField
+							id="comentarioResolucion"
+							label="Resolucion"
+							variant="standard"
+							value={comentario_resolucion}
+							onChange={(e) => setcomentario_resolucion(e.target.value)}
+						/>
 							<Button
 							variant="contained"
 							style={{

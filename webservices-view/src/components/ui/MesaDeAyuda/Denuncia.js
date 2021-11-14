@@ -31,7 +31,7 @@ const Denuncia = ({ denuncia }) => {
       <h3>Denuncia HD{denuncia.id}</h3>
       <h4>Producto asociado: {denuncia.pedido}</h4>
       <h4>Estado: {denuncia.estado}</h4>
-      <p>Comentario: {denuncia.comentarioComprador}</p>
+      <p>Comentario: {denuncia.comentario_comprador}</p>
       {denuncia.estado === "RESUELTO" ? (
         <p>Comentario: {denuncia.comentario_resolucion}</p>
       ) : (

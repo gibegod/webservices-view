@@ -1,5 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/styles";
+//import { makeStyles } from "@material-ui/styles";
+import { makeStyles } from '@mui/styles';
+//import { makeStyles } from '@material-ui/core/styles';
 import { ButtonBase, Grid, Paper, Typography } from "@material-ui/core";
 import "./catalogo.css";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -16,8 +18,8 @@ const useStyles = makeStyles((theme) => ({
 		maxHeight: 160,
 	},
 	image: {
-		marginLeft: theme.spacing(1),
-		marginRight: theme.spacing(2),
+		marginLeft: 8,
+		marginRight: 16,
 		width: 150,
 		height: 160,
 	},

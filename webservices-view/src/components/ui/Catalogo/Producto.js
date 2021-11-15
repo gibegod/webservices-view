@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Container, Grid, TextField } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import { makeStyles } from '@mui/styles';
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -18,8 +20,8 @@ const useStyles = makeStyles((theme) => ({
 		display: "flex",
 		alignItems: "center",
 		height: 50,
-		paddingLeft: theme.spacing(4),
-		backgroundColor: theme.palette.background.default,
+		paddingLeft: 32,
+		//backgroundColor: theme.palette.background.default,
 	},
 	img: {
 		height: 255,
@@ -176,8 +178,8 @@ const Producto = () => {
 								</Grid>
 							</Grid>
 
-							<Grid style={{ marginBottom: "10%", marginLeft: "4%" }}>
-								<Grid item xs={5}>
+							<Grid style={{ marginBottom: "10%", marginLeft: "4%", marginTop: "10%" }}>
+								<Grid item xs={6}>
 									<TextField
 										fullWidth
 										id="cantidad"
@@ -204,11 +206,11 @@ const Producto = () => {
 					) : null}
 
 
-							<Grid container justify="center" spacing={4}>
+							<Grid container justify="center">
 								<Button
 									color="primary"
 									variant="contained"
-									style={{ padding: 10, width: "80%", marginBottom: 10 }}
+									style={{ padding: 10, width: "100%", marginBottom: 10 }}
 									onClick={(e) => handleClickCarrito("compra")}
 								>
 									Comprar
@@ -217,7 +219,7 @@ const Producto = () => {
 									color="primary"
 									variant="contained"
 									fullWidth
-									style={{ padding: 10, width: "80%", marginBottom: 10 }}
+									style={{ padding: 10, width: "100%", marginBottom: 10 }}
 									onClick={(e) => handleClickCarrito("carrito")}
 								>
 									Agregar al carrito
@@ -226,7 +228,7 @@ const Producto = () => {
 									color="primary"
 									variant="contained"
 									fullWidth
-									style={{ padding: 10, width: "80%" }}
+									style={{ padding: 10, width: "100%" }}
 									onClick={(e) => history.push(`/nuevadenuncia/${producto.id}`)}
 								>
 									Denunciar publicacion

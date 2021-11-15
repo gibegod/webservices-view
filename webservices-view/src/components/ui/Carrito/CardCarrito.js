@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
 		maxHeight: 150,
 	},
 	image: {
-		marginLeft: theme.spacing(1),
+		marginLeft: 8,
 		width: 150,
 		height: 150,
 	},

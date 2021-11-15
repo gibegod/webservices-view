@@ -18,10 +18,9 @@ const Navegacion = () => {
     localStorage.removeItem("orden");
     localStorage.removeItem("carrito");
     history.push("/signin");
-
     window.location.reload();
   };
-console.log(usuarioSesionJSON);
+
   return (
     <Navbar bg="dark" variant="dark">
       <Container>

@@ -35,7 +35,7 @@ const Publicaciones = () => {
 
 	return (
 		<Container component="main" maxWidth="md">
-			<Table striped bordered hover>
+			<Table striped bordered hover className="mt-5">
 				<thead>
 					<tr>
 						<th>#</th>

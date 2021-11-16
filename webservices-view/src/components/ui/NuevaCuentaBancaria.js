@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Alert from "react-bootstrap/Alert";
+import axios from "axios";
 import { useHistory } from "react-router-dom";
 
 const theme = createTheme();
@@ -21,26 +22,38 @@ export default function NuevaCuentaBancaria() {
 		history.push("/signin");
 	}
 
-
-
+	usuarioSesion = JSON.parse(usuarioSesion);
 
 	//States
-	const [cvu, setcvu] = useState("");
-	const [dni, setdni] = useState("");
-	const [banco, setbanco] = useState("");
+	const [cbu, setcbu] = useState("");
 	const [showalert, setshowalert] = useState(false);
+	const [mensajealerta, setmensajealerta] = useState("");
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 
-		// const data = {user: usuario, pass: password}
-		// //Envio la info a la api
-		// const loguearse = await axios.post("http://localhost:8083/usuario/tarjeta", data);
-		// console.log(loguearse.data);
+		if(cbu.trim() === ""){
+			setshowalert(true);
+			setmensajealerta("ERROR: Por favor complete todos los campos.");
+			return;
+		}
 
-		//Pasar a la api y validar
-		//Si hay un error mostrar en pantalla
-		//Si no hay error pushear a pantalla principal
+		//Envio la info a la api
+		const data = {cbu, idUsuario: usuarioSesion.id}
+
+		const result = await axios.post("http://localhost:8084/usuario/cuentaBancaria", data);
+		console.log(result.data);
+
+		//Validar
+		if(result.data !== "OK"){
+			//Si hay un error mostrar en pantalla
+			setshowalert(true);
+			setmensajealerta(result.data);
+			return;
+		}
+
+		//Si no hay error pushear a mis datos
+		history.push("/misdatos");
 	};
 
 	return (
@@ -49,7 +62,7 @@ export default function NuevaCuentaBancaria() {
 				<CssBaseline />
 				<Box
 					sx={{
-						marginTop: 8,
+						marginTop: 5,
 						display: "flex",
 						flexDirection: "column",
 						alignItems: "center",
@@ -66,7 +79,7 @@ export default function NuevaCuentaBancaria() {
 							dismissible
 							style={{ width: "100%" }}
 						>
-							This is a danger alert—check it out!
+							{mensajealerta}
 						</Alert>
 					) : null}
 
@@ -79,41 +92,15 @@ export default function NuevaCuentaBancaria() {
 						<Grid container spacing={2}>
 							<Grid item xs={12}>
 								<TextField
+									name="cbu"
 									required
 									fullWidth
-									id="banco"
-									label="Banco"
-									name="banco"
-									value={banco}
-									onChange={(e) => setbanco(e.target.value)}
-									type="text"
-								/>
-							</Grid>
-
-							<Grid item xs={12}>
-								<TextField
-									name="CVU"
-									required
-									fullWidth
-									id="CVU"
-									label="CVU"
+									id="cbu"
+									label="CBU"
 									autoFocus
-									value={cvu}
-									onChange={(e) => setcvu(e.target.value)}
-									type="number"
-								/>
-							</Grid>
-
-							<Grid item xs={12}>
-								<TextField
-									required
-									fullWidth
-									name="dni"
-									label="DNI"
+									value={cbu}
+									onChange={(e) => setcbu(e.target.value)}
 									type="text"
-									id="dni"
-									onChange={(e) => setdni(e.target.value)}
-									value={dni}
 								/>
 							</Grid>
 						</Grid>

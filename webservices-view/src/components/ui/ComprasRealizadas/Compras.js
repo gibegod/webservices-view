@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Container, TextField, Grid, Typography } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import Button from "react-bootstrap/Button";
 import { Box } from "@mui/system";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import CardCompra from "./CardCompra";
 
 const Compras = () => {
 	let history = useHistory();
@@ -42,6 +41,8 @@ const Compras = () => {
 								m: 1,
 								fontWeight: "bold",
 								fontSize: 30,
+								marginTop: 2,
+								marginBottom: 2
 							}}
 						>
 							MIS COMPRAS
@@ -49,22 +50,12 @@ const Compras = () => {
 					</Typography>
 					{listacompras.map((compra) => (
 						<>
-							<h3>Compra {compra.id}</h3>
-							<h4>Estado: </h4>
-							<h4>Fecha: </h4>
-							{/* {compra.productos.map((prod) => (
-								<CardCompra
-									key={prod.id}
-									id={prod.id}
-									nombre={prod.nombre}
-									precio={prod.precio}
-									imagen={prod.imagen}
-									cantidad={prod.cantidad}
-								/>
-							))} */}
-							<h4>Total: $ {compra.total} </h4>
+							<h3><b>Compra {compra.id}</b></h3>
+							<h4><b>Estado:</b> {compra.estado}</h4>
+							<h4><b>Fecha:</b> {compra.fecha}</h4>
+							<h4><b>Total:</b> $ {compra.precioTotal} </h4>
 
-							<Grid item xs={12} sm={6}>
+							<Grid item xs={12} sm={6} className="mb-4">
 								<Button
 									variant="outline-primary"
 									onClick={(e) => history.push(`/nuevoreclamo/${compra.id}`)}

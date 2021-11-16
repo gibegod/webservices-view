@@ -8,13 +8,13 @@ const useStyles = makeStyles((theme) => ({
 		flexGrow: 1,
 	},
 	paper: {
-		paddingRight: "15px",
 		marginTop: 5,
 		maxHeight: 150,
+		padding: "5px"
 	},
 	img: {
-		maxWidth: "100%",
-		maxHeight: "100%",
+		maxWidth: "80%",
+		maxHeight: "80%",
 	},
 }));
 

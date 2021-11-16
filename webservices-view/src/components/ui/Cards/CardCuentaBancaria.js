@@ -6,18 +6,21 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Grid } from "@mui/material";
 
-export default function CardCuentaBancaria() {
+export default function CardCuentaBancaria({cuentabancaria}) {
+
+	console.log(cuentabancaria);
+
 	return (
 		<Card sx={{ minWidth: 275 }}>
 			<Grid container spacing={4}>
 				<Grid item xs={12} sm={8}>
 					<CardContent>
 						<Typography variant="h5" component="div">
-							Banco
+							Banco {cuentabancaria.banco}
 						</Typography>
 						<Typography sx={{ mb: 1.5 }} color="text.secondary">
-							CVU: <br />
-							DNI:
+							CBU: {cuentabancaria.cbu} <br />
+							Alias: {cuentabancaria.alias}
 						</Typography>
 					</CardContent>
 				</Grid>

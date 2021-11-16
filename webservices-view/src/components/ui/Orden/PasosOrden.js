@@ -117,13 +117,11 @@ export default function PasosOrden() {
 					localStorage.setItem("carrito", JSON.stringify(carritoLocalStorage));
 
         	//Borrar orden
-					localStorage.setItem("orden", "");
+					localStorage.removeItem("orden");
 
 					//Ir al catalogo
 					history.push("/catalogo");
 				}
-
-
 				break;
 			default:
 				break;
@@ -207,7 +205,7 @@ export default function PasosOrden() {
 				{activeStep === steps.length ? (
 					<React.Fragment>
 						<Typography sx={{ mt: 2, mb: 1 }}>
-							All steps completed - you&apos;re finished
+							Muchas gracias por tu compra!
 						</Typography>
 						<Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
 							<Box sx={{ flex: "1 1 auto" }} />

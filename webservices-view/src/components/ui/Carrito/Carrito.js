@@ -21,7 +21,7 @@ const Carrito = () => {
 	let listavendedores = [];
 	if (listacarrito !== null) {
 		listacarrito.forEach((prd) => {
-			listavendedores.push(prd.idvendedor);
+			listavendedores.push(prd.vendedor.id);
 		});
 	}
 
@@ -57,7 +57,7 @@ const Carrito = () => {
 			var ordenls = localStorage.getItem("orden");
 
 			const productos = listacarrito.filter(
-				(prod) => prod.idvendedor === listavendedores[0]
+				(prod) => prod.vendedor.id === listavendedores[0]
 			);
 			let totalorden = 0;
 			productos.forEach((prod) => {
@@ -100,12 +100,12 @@ const Carrito = () => {
 							) : (
 								listavendedores.map((vend) => (
 									<>
-										<Typography variant="h6" align="center" gutterBottom>
+										<Typography variant="h6" align="center" gutterBottom className="mt-3">
 											Vendedor {vend}
 										</Typography>
 
 										{listacarrito.map((prod) =>
-											prod.idvendedor === vend ? (
+											prod.vendedor.id === vend ? (
 												<CardCarrito
 													key={prod.id}
 													id={prod.id}

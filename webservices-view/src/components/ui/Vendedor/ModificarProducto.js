@@ -52,11 +52,11 @@ export default function ModificarProducto() {
 		);
 		console.log(resultProducto.data);
 
-		setid(resultProducto.data.idProducto);
+		setid(resultProducto.data.id);
 		setnombre(resultProducto.data.nombre);
 		setdescripcion(resultProducto.data.descripcion);
 		setimagen(resultProducto.data.imagen);
-		setcategoria(resultProducto.data.categoria);
+		setcategoria(resultProducto.data.categoria.nombre);
 		setprecio(resultProducto.data.precio);
 		setstockactual(resultProducto.data.stockActual);
 		setstockinicial(resultProducto.data.stockInicial);
@@ -81,13 +81,13 @@ export default function ModificarProducto() {
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		/*
+
 		if (
 			nombre.trim() === "" ||
 			descripcion.trim() === "" ||
-			imagen.trim() === "" ||
-			precio.trim() === "" ||
-			stock.trim() === "" ||
+			imagen === "" ||
+			precio === "" ||
+			stockactual === "" ||
 			formadepago === "" ||
 			categoria.trim() === "" ||
 			(categoria.trim() === "nuevacategoria" && nuevacategoria.trim() === "")
@@ -97,31 +97,30 @@ export default function ModificarProducto() {
 		}
 
 		const data = {
+			id,
 			nombre,
 			descripcion,
 			imagen,
 			precio,
-			stockInicial: stock,
-			stockActual: stock,
+			stockInicial: stockactual,
+			stockActual: stockactual,
 			activo: true,
-			categoria: categoria === "nuevacategoria" ? nuevacategoria : categoria,
-			idVendedor: usuarioSesion.id,
+			categoria: categoria === "nuevacategoria" ? {nombre: nuevacategoria} : {nombre: categoria},
+			vendedor: {id: usuarioSesion.id},
 			debito: formadepago === "Debito" || formadepago === "Credito y Debito" ? true : false,
 			credito: formadepago === "Credito" || formadepago === "Credito y Debito" ? true : false
 		}
 
-		console.log(data);
-
 		//Envio la info a la api
 		const result = await axios.post(
-			"http://localhost:8084/productos/addProducto",
+			"http://localhost:8084/productos/updateProducto",
 			data
 		);
 		console.log(result.data);
 
 		//Ir a MisDatos
-		//history.push("/misdatos");
-    */
+		history.push("/publicaciones");
+
 	};
 
 	return (
@@ -168,6 +167,7 @@ export default function ModificarProducto() {
 									value={nombre}
 									onChange={(e) => setnombre(e.target.value)}
 									type="text"
+									disabled={stockinicial !== stockactual ? true : false}
 								/>
 							</Grid>
 
@@ -183,6 +183,7 @@ export default function ModificarProducto() {
 									value={descripcion}
 									onChange={(e) => setdescripcion(e.target.value)}
 									type="text"
+									disabled={stockinicial !== stockactual ? true : false}
 								/>
 							</Grid>
 
@@ -196,6 +197,7 @@ export default function ModificarProducto() {
 									value={imagen}
 									onChange={(e) => setimagen(e.target.value)}
 									type="text"
+									disabled={stockinicial !== stockactual ? true : false}
 								/>
 							</Grid>
 
@@ -210,6 +212,7 @@ export default function ModificarProducto() {
 										value={categoria}
 										label="Categoria existente"
 										onChange={(e) => setcategoria(e.target.value)}
+										disabled={stockinicial !== stockactual ? true : false}
 									>
 										<MenuItem value="nuevacategoria">Nueva categoria</MenuItem>
 										{listacategorias.map((c) => (
@@ -242,6 +245,7 @@ export default function ModificarProducto() {
 									value={precio}
 									onChange={(e) => setprecio(e.target.value)}
 									type="number"
+									disabled={stockinicial !== stockactual ? true : false}
 								/>
 							</Grid>
 

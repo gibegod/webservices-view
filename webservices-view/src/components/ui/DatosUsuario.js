@@ -32,13 +32,14 @@ const DatosUsuario = () => {
 	const [telefono, settelefono] = useState("");
 	const [domicilios, setdomicilios] = useState([]);
 	const [tarjetas, settarjetas] = useState([]);
+	const [cuentasbancarias, setcuentasbancarias] = useState([]);
 	const [showalert, setshowalert] = useState(false);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
 		//Validacion
-		if(
+		if (
 			nombre.trim() === "" ||
 			apellido.trim() === "" ||
 			usuario.trim() === "" ||
@@ -68,7 +69,7 @@ const DatosUsuario = () => {
 		console.log(result);
 
 		//Si no esta ok tirar error
-		if(result.data !== "OK"){
+		if (result.data !== "OK") {
 			setshowalert(true);
 			return;
 		}
@@ -79,29 +80,48 @@ const DatosUsuario = () => {
 			id: usuarioSesion.id,
 			nombre,
 			tipousuario: usuarioSesion.tipousuario,
-			usuario
-		}
+			usuario,
+		};
 
 		localStorage.setItem("usuario", JSON.stringify(usuarioAux));
 	};
 
 	const fetchApi = async (usuario) => {
-		const result = await axios.get(`http://localhost:8083/usuario/${usuario}`);
-		console.log(result.data);
+		if (usuario.tipousuario.tipo === "Comprador") {
+			const result = await axios.get(
+				`http://localhost:8083/usuario/${usuario.usuario}`
+			);
+			console.log(result.data);
 
-		setnombre(result.data.nombre);
-		setapellido(result.data.apellido);
-		setusuario(result.data.usuario);
-		settipousuario(result.data.tipoUsuario.tipo);
-		setdni(result.data.dni);
-		setpassword(result.data.contrasenia);
-		settelefono(result.data.telefono);
-		setdomicilios(result.data.domicilios);
-		settarjetas(result.data.tarjetas);
+			setnombre(result.data.nombre);
+			setapellido(result.data.apellido);
+			setusuario(result.data.usuario);
+			settipousuario(result.data.tipoUsuario.tipo);
+			setdni(result.data.dni);
+			setpassword(result.data.contrasenia);
+			settelefono(result.data.telefono);
+			setdomicilios(result.data.domicilios);
+			settarjetas(result.data.tarjetas);
+		} else {
+			const result = await axios.get(
+				`http://localhost:8084/usuario/${usuario.usuario}`
+			);
+			console.log(result.data);
+
+			setnombre(result.data.nombre);
+			setapellido(result.data.apellido);
+			setusuario(result.data.usuario);
+			settipousuario(usuario.tipousuario.tipo);
+			setdni(result.data.dni);
+			setpassword(result.data.contrasenia);
+			settelefono(result.data.telefono);
+			setdomicilios(result.data.domicilios);
+			setcuentasbancarias(result.data.cuentasBancarias);
+		}
 	};
 
 	useEffect(() => {
-		fetchApi(usuarioSesion.usuario);
+		fetchApi(usuarioSesion);
 	}, [usuarioSesion.usuario]);
 
 	return dni === "" ? (
@@ -120,8 +140,7 @@ const DatosUsuario = () => {
 				onSubmit={handleSubmit}
 			>
 				<Grid container spacing={4}>
-
-				{showalert ? (
+					{showalert ? (
 						<Alert
 							variant="danger"
 							onClose={() => setshowalert(false)}
@@ -242,25 +261,22 @@ const DatosUsuario = () => {
 			<Grid container>
 				{tipousuario === "Comprador" ? (
 					<>
-				<Grid item xs={12} className="pb-2 pt-4">
-					<Typography component="div">
-						<Box
-							sx={{
-								textAlign: "center",
-								m: 1,
-								fontWeight: "bold",
-								fontSize: 30,
-							}}
-						>
-							Tarjetas
-						</Box>
-					</Typography>
-					{tarjetas.map(tarj => (
-						<CardTarjeta
-							tarjeta={tarj}
-						/>
-					))}
-							
+						<Grid item xs={12} className="pb-2 pt-4">
+							<Typography component="div">
+								<Box
+									sx={{
+										textAlign: "center",
+										m: 1,
+										fontWeight: "bold",
+										fontSize: 30,
+									}}
+								>
+									Tarjetas
+								</Box>
+							</Typography>
+							{tarjetas.map((tarj) => (
+								<CardTarjeta key={tarj.id} tarjeta={tarj} />
+							))}
 						</Grid>
 						<Grid item xs={12} sm={6}>
 							<Button
@@ -274,20 +290,21 @@ const DatosUsuario = () => {
 				) : (
 					<>
 						<Grid item xs={12} className="pb-2 pt-4">
-					<Typography component="div">
-						<Box
-							sx={{
-								textAlign: "center",
-								m: 1,
-								fontWeight: "bold",
-								fontSize: 30,
-							}}
-						>
-							Cuentas Bancarias
-						</Box>
-					</Typography>
-							<CardCuentaBancaria />
-							<CardCuentaBancaria />
+							<Typography component="div">
+								<Box
+									sx={{
+										textAlign: "center",
+										m: 1,
+										fontWeight: "bold",
+										fontSize: 30,
+									}}
+								>
+									Cuentas Bancarias
+								</Box>
+							</Typography>
+							{cuentasbancarias.map((cuenta) => (
+								<CardCuentaBancaria key={cuenta.id} cuentabancaria={cuenta} />
+							))}
 						</Grid>
 						<Grid item xs={12} sm={6}>
 							<Button

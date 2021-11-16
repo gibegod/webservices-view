@@ -7,9 +7,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import {
-  useParams, useHistory
-} from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
+import axios from 'axios';
 import Alert from "react-bootstrap/Alert";
 
 const theme = createTheme();
@@ -23,19 +22,38 @@ export default function FormReclamo() {
 		history.push("/signin");
 	}
 
-
 	//States
 	const [comentario, setcomentario] = useState("");
 	const [showalert, setshowalert] = useState(false);
 
-  const { id } = useParams();
+	const { id } = useParams();
 
-	const handleSubmit = (event) => {
+	const handleSubmit = async (event) => {
 		event.preventDefault();
 
-		//Pasar a la api
-		//Si hay un error mostrar en pantalla
-		//Si no hay error pushear a pantalla principal
+		//Validar
+		if(comentario.trim() === ""){
+			setshowalert(true);
+			return;
+		}
+
+		const data = {
+			idVenta: id,
+			comentarioComprador: comentario
+		};
+		
+		const header = [
+			{"Access-Control-Allow-Origin": "*"}
+	]
+
+		//Envio la info a la api
+		const result = await axios.post(
+			"http://localhost:8083/venta/reclamar",
+			data, header
+		);
+
+		console.log(result.data);
+
 	};
 
 	return (
@@ -44,14 +62,23 @@ export default function FormReclamo() {
 				<CssBaseline />
 				<Box
 					sx={{
-						marginTop: 8,
+						marginTop: 4,
 						display: "flex",
 						flexDirection: "column",
 						alignItems: "center",
 					}}
 				>
-					<Typography component="h1" variant="h5">
-						Nuevo reclamo
+					<Typography component="div">
+						<Box
+							sx={{
+								textAlign: "center",
+								m: 1,
+								fontWeight: "bold",
+								fontSize: 30,
+							}}
+						>
+							NUEVO RECLAMO
+						</Box>
 					</Typography>
 
 					{showalert ? (
@@ -61,7 +88,7 @@ export default function FormReclamo() {
 							dismissible
 							style={{ width: "100%" }}
 						>
-							This is a danger alert—check it out!
+							ERROR: Por favor, complete todos los campos
 						</Alert>
 					) : null}
 
@@ -74,7 +101,7 @@ export default function FormReclamo() {
 						<Grid container spacing={2}>
 							<Grid item xs={12}>
 								<Typography component="h2" variant="h5">
-									Compra: {id}
+									Numero de Compra: {id}
 								</Typography>
 							</Grid>
 							<Grid item xs={12}>
@@ -82,7 +109,7 @@ export default function FormReclamo() {
 									required
 									fullWidth
 									multiline
-									rows={12}
+									rows={9}
 									id="comentario"
 									label="Comentario"
 									name="comentario"

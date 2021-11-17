@@ -137,10 +137,10 @@ export default function PasosOrden() {
 				let mediospago = [];
 				ordenls.productos.forEach(prod => {
 					if(prod.credito === true) {
-						mediospago.push("Credito");
+						mediospago.push("CREDITO");
 					}
 					if(prod.debito === true){
-						mediospago.push("Debito");
+						mediospago.push("DEBITO");
 					}
 				});
 

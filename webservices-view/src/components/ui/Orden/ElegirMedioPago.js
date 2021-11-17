@@ -1,15 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-
-let mediosdepagoprueba = [
-	{ id: 1, tipo: "Credito", numero: 41241241241, banco: "Santander" },
-	{ id: 2, tipo: "Credito", numero: 837243243, banco: "BBVA" },
-	{ id: 3, tipo: "Debito", numero: 98162497624, banco: "Galicia" },
-	{ id: 4, tipo: "MercadoPago", numero: 98162497624, banco: "Galicia" },
-];
 
 const ElegirMedioPago = (props) => {
 	const { idmediopago, setidmediopago, mediosdepagoorden, datosusuario } = props;

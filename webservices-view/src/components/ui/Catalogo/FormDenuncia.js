@@ -12,14 +12,6 @@ import { useParams, useHistory } from "react-router-dom";
 import axios from "axios";
 import Alert from "react-bootstrap/Alert";
 
-const categoriasdenunciaprueba = [
-	"Falsificación",
-	"Producto ilegal",
-	"Fraude",
-	"Contenido inapropiado",
-	"Otro",
-];
-
 const theme = createTheme();
 
 export default function FormDenuncia() {
@@ -34,7 +26,8 @@ export default function FormDenuncia() {
 	usuarioSesion = JSON.parse(usuarioSesion);
 
 	//States
-	const [categoriadenuncia, setcategoriadenuncia] = useState("");
+	const [listacategoriasdenuncia, setlistacategoriasdenuncia] = useState([]);
+	const [categoriadenuncia, setcategoriadenuncia] = useState();
 	const [producto, setproducto] = useState({});
 	const [comentario, setcomentario] = useState("");
 	const [showalert, setshowalert] = useState(false);
@@ -47,8 +40,12 @@ export default function FormDenuncia() {
 			`http://localhost:8084/productos/ProductoId=${idProducto}`
 		);
 		console.log(result.data);
-
 		setproducto(result.data);
+
+		const resultCategoriasDenuncia = await axios.get(
+			`http://localhost:8084/usuario/categorias-denuncia`
+		);
+		setlistacategoriasdenuncia(resultCategoriasDenuncia.data);
 	};
 
 	useEffect(() => {
@@ -61,26 +58,34 @@ export default function FormDenuncia() {
 		event.preventDefault();
 
 		//Validacion
-		if(categoriadenuncia === "" || comentario.trim() === ""){
+		if (categoriadenuncia === "" || comentario.trim() === "") {
 			setshowalert(true);
 			return;
 		}
 
 		const data = {
-			//idCategoria,
+			idCategoria: categoriadenuncia,
 			idProducto,
 			idComprador: usuarioSesion.id,
-			comentario
+			comentario,
 		};
 
 		//Envio la info a la api
-		const result = await axios.post("http://localhost:8083/denunciar/denunciar", data);
+		const result = await axios.post(
+			"http://localhost:8083/producto/denunciar",
+			data
+		);
 
 		console.log(result.data);
 
-
-		//Si hay un error mostrar en pantalla
-		//Si no hay error pushear a pantalla principal
+		if (result.data !== "OK") {
+			//Si hay un error mostrar en pantalla
+			setshowalert(true);
+			return;
+		} else {
+			//Si no hay error pushear a pantalla principal
+			history.push("/denuncias");
+		}
 	};
 
 	return (
@@ -142,9 +147,9 @@ export default function FormDenuncia() {
 									onChange={(e) => setcategoriadenuncia(e.target.value)}
 									fullWidth
 								>
-									{categoriasdenunciaprueba.map((option) => (
-										<MenuItem key={option} value={option}>
-											{option}
+									{listacategoriasdenuncia.map((option) => (
+										<MenuItem key={option.id} value={option.id}>
+											{option.nombre}
 										</MenuItem>
 									))}
 								</TextField>

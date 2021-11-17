@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
 		alignItems: "center",
 		height: 50,
 		paddingLeft: 32,
-		//backgroundColor: theme.palette.background.default,
 	},
 	img: {
 		height: 255,
@@ -167,7 +166,7 @@ const Producto = () => {
 
 							<Grid container style={{ marginLeft: "4%" }}>
 								<Grid item xs={6}>
-									<Typography variant="h4">
+									<Typography variant="h5">
 										${producto.precio.toFixed(2)}
 									</Typography>
 								</Grid>

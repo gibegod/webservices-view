@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { useHistory, useParams } from "react-router";
 import axios from "axios";
-import Spinner from "../Spinner";
+import Spinner from "../Others/Spinner";
 import Alert from "react-bootstrap/Alert";
 
 const useStyles = makeStyles((theme) => ({

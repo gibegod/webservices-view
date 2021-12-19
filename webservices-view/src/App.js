@@ -4,13 +4,12 @@ import {
   Switch,
   Route
 } from "react-router-dom";
-import SignUp from "./components/ui/auth/SignUp";
-import SignIn from "./components/ui/auth/SignIn";
+import SignUp from "./components/ui/Auth/SignUp";
+import SignIn from "./components/ui/Auth/SignIn";
 import Navegacion from "./components/ui/Navegacion";
-import StickyFooter from "./components/ui/StickyFooter";
-import DatosUsuario from "./components/ui/DatosUsuario";
-import NuevaTarjeta from "./components/ui/NuevaTarjeta";
-import NuevoDomicilio from './components/ui/NuevoDomicilio';
+import DatosUsuario from "./components/ui/DatosUsuario/DatosUsuario";
+import NuevaTarjeta from "./components/ui/DatosUsuario/NuevaTarjeta";
+import NuevoDomicilio from './components/ui/DatosUsuario/NuevoDomicilio';
 import Catalogo from "./components/ui/Catalogo/Catalogo";
 import Producto from "./components/ui/Catalogo/Producto";
 import Carrito from "./components/ui/Carrito/Carrito";
@@ -20,7 +19,7 @@ import FormReclamo from "./components/ui/ComprasRealizadas/FormReclamo";
 import Reclamos from "./components/ui/ComprasRealizadas/Reclamos";
 import FormDenuncia from "./components/ui/Catalogo/FormDenuncia";
 import Denuncias from "./components/ui/Catalogo/Denuncias";
-import NuevaCuentaBancaria from "./components/ui/NuevaCuentaBancaria";
+import NuevaCuentaBancaria from "./components/ui/DatosUsuario/NuevaCuentaBancaria";
 import MesaDeAyuda from "./components/ui/MesaDeAyuda/MesaDeAyuda";
 import CrearProducto from "./components/ui/Vendedor/CrearProducto";
 import Publicaciones from "./components/ui/Vendedor/Publicaciones";

@@ -13,7 +13,7 @@ import axios from "axios";
 import ElegirDomicilio from "./ElegirDomicilio";
 import ElegirMedioPago from "./ElegirMedioPago";
 import ResumenCompra from "./ResumenCompra";
-import Spinner from "../Spinner";
+import Spinner from "../Others/Spinner";
 
 const steps = ["Domicilio y Medio de pago", "Confirmar"];
 

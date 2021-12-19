@@ -1,9 +1,6 @@
 import React from "react";
-import { Container, TextField, Grid, Typography } from "@mui/material";
-import Button from "@mui/material/Button";
-import { Box } from "@mui/system";
+import { Container, Grid, Typography } from "@mui/material";
 import { useHistory } from "react-router-dom";
-import CardCompra from "./CardCompra";
 
 const reclamosprueba = [
 	{

@@ -75,7 +75,7 @@ export default function SignUp() {
 			setshowalert(false);
 			setmensajealert("");
 
-			history.push("/");
+			history.push("/catalogo");
 			window.location.reload();
 		} else {
 			//Si hay un error mostrar en pantalla

@@ -5,10 +5,10 @@ import { Box } from "@mui/system";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Alert from "react-bootstrap/Alert";
-import CardTarjeta from "./Cards/CardTarjeta";
-import CardDomicilio from "./Cards/CardDomicilio";
-import CardCuentaBancaria from "./Cards/CardCuentaBancaria";
-import Spinner from "./Spinner";
+import CardTarjeta from "./CardTarjeta";
+import CardDomicilio from "./CardDomicilio";
+import CardCuentaBancaria from "./CardCuentaBancaria";
+import Spinner from "../Others/Spinner";
 
 const DatosUsuario = () => {
 	let history = useHistory();

@@ -14,14 +14,15 @@ const Compras = () => {
 		history.push("/signin");
 	}
 
-	usuarioSesion = JSON.parse(usuarioSesion);	
+	usuarioSesion = JSON.parse(usuarioSesion);
 
 	//States
 	const [listacompras, setlistacompras] = useState([]);
 
-
 	const fetchApi = async (idComprador) => {
-		const result = await axios.get(`http://localhost:8083/venta/comprador=${idComprador}`);
+		const result = await axios.get(
+			`http://localhost:8083/venta/comprador=${idComprador}`
+		);
 		console.log(result.data);
 		setlistacompras(result.data);
 	};
@@ -30,11 +31,21 @@ const Compras = () => {
 		fetchApi(usuarioSesion.id);
 	}, [usuarioSesion.id]);
 
+
+	const handleCancelarCompra = async (e, idcompra) => {
+		e.preventDefault();
+			
+		const result = await axios.post(`http://localhost:8084/venta/${idcompra}/cancelar/${usuarioSesion.id}`);
+		console.log(result.data);
+
+		window.location.reload();
+	}
+
 	return (
 		<Container component="main" maxWidth="md">
 			<Grid container spacing={4}>
 				<Grid item xs={12}>
-				<Typography component="div">
+					<Typography component="div">
 						<Box
 							sx={{
 								textAlign: "center",
@@ -42,7 +53,7 @@ const Compras = () => {
 								fontWeight: "bold",
 								fontSize: 30,
 								marginTop: 2,
-								marginBottom: 2
+								marginBottom: 2,
 							}}
 						>
 							MIS COMPRAS
@@ -50,10 +61,18 @@ const Compras = () => {
 					</Typography>
 					{listacompras.map((compra) => (
 						<>
-							<h3><b>Compra {compra.id}</b></h3>
-							<h4><b>Estado:</b> {compra.estado}</h4>
-							<h4><b>Fecha:</b> {compra.fecha}</h4>
-							<h4><b>Total:</b> $ {compra.precioTotal} </h4>
+							<h3>
+								<b>Compra {compra.id}</b>
+							</h3>
+							<h4>
+								<b>Estado:</b> {compra.estado}
+							</h4>
+							<h4>
+								<b>Fecha:</b> {compra.fecha}
+							</h4>
+							<h4>
+								<b>Total:</b> $ {compra.precioTotal}{" "}
+							</h4>
 
 							<Grid item xs={12} sm={6} className="mb-4">
 								<Button
@@ -62,7 +81,11 @@ const Compras = () => {
 								>
 									INICIAR RECLAMO
 								</Button>
-								<Button variant="outline-primary">
+								<Button
+									variant="outline-primary"
+									disabled={compra.estado === "EN_PREPARACION" ? false : true}
+									onClick={e => handleCancelarCompra(e, compra.id)}
+								>
 									CANCELAR COMPRA
 								</Button>
 							</Grid>

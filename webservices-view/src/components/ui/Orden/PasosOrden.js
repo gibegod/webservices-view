@@ -13,7 +13,7 @@ import axios from "axios";
 import ElegirDomicilio from "./ElegirDomicilio";
 import ElegirMedioPago from "./ElegirMedioPago";
 import ResumenCompra from "./ResumenCompra";
-import Spinner from "../Spinner";
+import Spinner from "../Others/Spinner";
 
 const steps = ["Domicilio y Medio de pago", "Confirmar"];
 
@@ -137,10 +137,10 @@ export default function PasosOrden() {
 				let mediospago = [];
 				ordenls.productos.forEach(prod => {
 					if(prod.credito === true) {
-						mediospago.push("Credito");
+						mediospago.push("CREDITO");
 					}
 					if(prod.debito === true){
-						mediospago.push("Debito");
+						mediospago.push("DEBITO");
 					}
 				});
 

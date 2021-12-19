@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useParams, useHistory } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 import Alert from "react-bootstrap/Alert";
 
 const theme = createTheme();
@@ -32,28 +32,30 @@ export default function FormReclamo() {
 		event.preventDefault();
 
 		//Validar
-		if(comentario.trim() === ""){
+		if (comentario.trim() === "") {
 			setshowalert(true);
 			return;
 		}
 
 		const data = {
 			idVenta: id,
-			comentarioComprador: comentario
+			comentarioComprador: comentario,
 		};
-		
-		const header = [
-			{"Access-Control-Allow-Origin": "*"}
-	]
 
 		//Envio la info a la api
 		const result = await axios.post(
 			"http://localhost:8083/venta/reclamar",
-			data, header
+			data
 		);
 
 		console.log(result.data);
 
+		if (result.data !== "OK") {
+			setshowalert(true);
+			return;
+		} else {
+			history.push("/reclamos");
+		}
 	};
 
 	return (

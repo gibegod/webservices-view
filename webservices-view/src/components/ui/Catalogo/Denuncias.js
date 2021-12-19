@@ -1,6 +1,8 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { Container, Grid, Typography } from "@mui/material";
+import { Box } from "@mui/system";
 import { useHistory } from "react-router-dom";
+import axios from 'axios';
 
 const denunciasprueba = [
 	{
@@ -27,19 +29,43 @@ const denunciasprueba = [
 const Denuncias = () => {
 	let history = useHistory();
 
-	const usuarioSesion = localStorage.getItem("usuario");
+	let usuarioSesion = localStorage.getItem("usuario");
 	//Si el usuario no esta logueado no puede entrar a la pagina
 	if (usuarioSesion === "" || usuarioSesion === null) {
 		history.push("/signin");
 	}
+
+	usuarioSesion = JSON.parse(usuarioSesion);
+
+
+	// const fetchApi = async (idComprador) => {
+	// 	const result = await axios.get(`http://localhost:8083/venta/comprador=${idComprador}`);
+	// 	console.log(result.data);
+	// 	setlistacompras(result.data);
+	// };
+
+	// useEffect(() => {
+	// 	fetchApi(usuarioSesion.id);
+	// }, [usuarioSesion.id]);
 
 
 	return (
 		<Container component="main" maxWidth="md">
 			<Grid container spacing={4}>
 				<Grid item xs={12}>
-					<Typography component="h1" variant="h5">
-						Mis denuncias
+				<Typography component="div">
+						<Box
+							sx={{
+								textAlign: "center",
+								m: 1,
+								fontWeight: "bold",
+								fontSize: 30,
+								marginTop: 2,
+								marginBottom: 2
+							}}
+						>
+							MIS DENUNCIAS
+						</Box>
 					</Typography>
 					{denunciasprueba.map((denuncia) => (
 						<>
